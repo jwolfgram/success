@@ -1,0 +1,27 @@
+{
+  "name": "success",
+  "version": "1.0.0",
+  "description": "A task list manager for the multitasker",
+  "main": "http.js",
+  "dependencies": {
+    "angular-route": "^1.4.9",
+    "express": "^4.13.4",
+    "gulp": "^3.9.0",
+    "gulp-nodemon": "^2.0.6",
+    "nodemon": "^1.8.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "nodemon http.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwolfgram/success.git"
+  },
+  "author": "Joe Wolfgram",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwolfgram/success/issues"
+  },
+  "homepage": "https://github.com/jwolfgram/success#readme"
+}
