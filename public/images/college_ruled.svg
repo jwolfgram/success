@@ -1,0 +1,17 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' height='100%'>
+  <defs id='defs4'>
+		<filter color-interpolation-filters='sRGB' id='f'>
+			<feTurbulence type='fractalNoise' baseFrequency='100 .85' numOctaves='1'/>
+		</filter>
+		<pattern patternUnits='userSpaceOnUse' patternTransform='translate(0 80)' id='l' width='100%' height='25'>
+			<line x1='-10%' y1='1' x2='110%' y2='1' stroke='#568' stroke-width='1'/>
+		</pattern>
+		<pattern patternUnits='userSpaceOnUse' id='p' width='100' height='100'>
+			<rect x='-10' y='-10' height='120' width='120' style='filter:url(#f)' />
+		</pattern>
+	</defs>
+	<rect x='-10%' y='-10%' height='120%' width='120%' style='fill:url(#p)' />
+	<rect x='-10%' y='80' height='100%' width='120%' style='fill:url(#l)' />
+	<line x1='120' y1='-5%' x2='120' y2='105%' stroke='#856' />
+	<rect x='-50%' y='-50%' height='200%' width='200%' style='fill:#fff;fill-opacity:0.8;'/>
+</svg>

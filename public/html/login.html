@@ -1,8 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="/style/login.css">
 </head>
 <body>
-  <h2>Pizza Pie</h2>
+  <div class="background">
+    <div id="nav" class="container" >
+      <div class="row">
+        <div class="col-xs-11 col-sm-10 col-md-10 col-lg-10">
+          <ul class="nav nav-pills">
+            <li role="presentation" class="active"><a href="#">Home</a></li>
+            <li role="presentation" data-toggle="modal" data-target="#about"><a>About</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div id="login" class="col-xs-8 col-sm-6 col-md-4 col-lg-3">
+          <form class="form-signin">
+            <h2 class="form-signin-heading center-block">Get It Done!</h2>
+            <label for="inputEmail">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+            <label for="inputPassword">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" value="remember-me"> Remember me
+              </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          </form>
+          <h4>Or Signin with your Google Account:</h4>
+          <a id="googleButton" href="">
+            <i class="fa fa-3x fa-google-plus-square"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h3 class="modal-title" id="myModalLabel">About - Get  it done!</h3>
+          </div>
+          <div class="modal-body">
+            <p>Get it done is a task manager made for the modern multitasker, including steps to complete your task and a space to take notes while working on your projects so you can remember where you left off when life calls you away.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </body>
 </html>
