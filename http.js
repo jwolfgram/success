@@ -4,91 +4,105 @@ app = express(),
 bodyParser = require('body-parser'),
 mongoose = require('mongoose'),
 passportLocal = require('passport-local').Strategy,
-passport = require('passport');
+passport = require('passport'),
+session = require('express-session');
 
 mongoose.connect('mongodb://localhost/success');
 
+var User = mongoose.model('login', mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
+}));
 
-passport.use(new passportLocal({
-    usernameField: 'username',
-    passwordField: 'password'
-  },
+passport.use(new passportLocal({usernameField: 'username', passwordField: 'password'},
   function(username, password, done) {
-    if (username === 'username' && password === 'password') {
-      console.log('Login accepted: ' + username);
-      return done(null, true, username);  //failed to serialize user error here....
-    }
-    else {
-      console.log('Login Rejected');
-      return done(null, false, { message: 'Incorrect Login.' });
-    }
-    console.log('Login gone messed up');
-  }
-));
+    console.log('How did we get here...' + username);
+    User.find({ 'username': username }, function (err, docs) {
+      if (docs.length === 0) {
+        return done(err);
+      }
+      else {
+        if (docs[0].password === password) { //No loop needed, we just find the one user and check the password when Mongoose returns.
+          console.log('Verified password matches user');
+          return done(null, username);
+        }
+        else {
+          console.log('Could not verify password was correct');
+          return done(null, false, { message: 'Incorrect Login.' });
+        }
+      }
+    });
+  }));
 
-var theInitializer = passport.initialize();
-app.use(theInitializer);
+app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 passport.serializeUser(function(user, done) {
-  console.log('serializeUser:: ' + user);
+  console.log('Authenitcated: ' + user);
   done(null, user);
 });
 
 passport.deserializeUser(function(user, done) {
-  console.log('deserializeUser:: ' + user);
-  done(null, false, user);
+  User.find({ 'username': user }, function (err, docs) {
+    if (docs.length === 0) {
+      return done(err);
+    }
+    else {
+      //console.log(docs[0].username + ' has been deserialized');
+      return done(err, docs[0].username);
+    }
+  });
 });
 
-app.post('/login', bodyParser.urlencoded({ extended: false }), passport.authenticate('local',{ successRedirect: '/home', failureRedirect: '/'}), function(req, res) {
-  console.log('Hello');
+app.post('/login', bodyParser.urlencoded({ extended: false }), passport.authenticate('local',{ successRedirect: '/home', failureRedirect: '/'}));
+
+app.post('/signup', bodyParser.urlencoded({ extended: false }), function(req, res) {
+  console.log(req.body.username);
+  console.log(req.body.password);
+  /*
+  new User ({
+    username: 'joe',
+    password: 'password'
+  }).save(function(err) {
+    if (err) {
+      console.log(err);
+    }else {
+      console.log('User saved successfully!');
+    }
+  });
+*/
 });
 
 /*Above is passport redirection procedure */
 
-var User = mongoose.model('login', mongoose.Schema({
-  user: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+var Task = mongoose.model('task', mongoose.Schema({
+  user: String,
+  task: [{
+    title: String,
+    step: String,
+    note: [{
+      comment: String,
+      date: { type: Date, default: Date.now },
+    }]
+  }]
 }));
 
-var Task = mongoose.model('task', mongoose.Schema({
-    user: String,
-    task: [{
-      title: String,
-      step: String,
-      note: [{
-        comment: String,
-        date: { type: Date, default: Date.now },
-      }]
-    }]
-    }));
-
-/* This is the block we will use to make a new user to login with */
-
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/html/login.html'));
+  if (req.isAuthenticated()) {
+    res.redirect('/home');
+  } else {
+    res.sendFile(path.join(__dirname + '/public/html/login.html'));
+  }
   console.log('Wooa!Another User!');
 });
 
 app.get('/home', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/html/board.html'));
-});
-
-new User ({
-  user: 'joe',
-  password: 'password'
-}).save(function(err) {
-  if (err) {
-    console.log(err);
-  }else {
-    console.log('User saved successfully!');
+  if (req.isAuthenticated()) {
+    res.sendFile(path.join(__dirname + '/public/html/board.html'));
+  } else {
+    res.redirect('/');
   }
-});
-
-app.get('/db', function (req, res) {
-  //new score({ name: 'Joe', score: '10'  }).save();
-  score.find({}, function (err, docs) {
-    res.send(docs);
-  });
 });
 
 app.use('/style',express.static('public/css')); //Route to /style for css

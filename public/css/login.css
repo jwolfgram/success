@@ -28,3 +28,7 @@
     color: rgb(255,0,0);
     text-decoration: none;
 }
+
+#signup {
+      background-image: linear-gradient(to bottom, #FFFFFF 0%, #D3D8E8 100%);
+}
