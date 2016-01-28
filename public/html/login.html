@@ -70,19 +70,20 @@
 
             <form class="form-horizontal" action="/signup" method="post" ng-controller="signupController as user" ngform name="signup">
               <h4>It's free and always will be.</h4>
-
               <div class="form-group">
-
-                <div class="col-xs-6 col-md-6">
+                <div class="col-xs-6">
                   <input type="text" name="firstname" value="" class="form-control input-lg" placeholder="First Name" ng-model="first" required ng-minlength="3"/>
-                  <span ng-show="!user.first">Please enter your first name!</span>
-                  <span ng-hide="!user.first">Thanks. Successfully validated!</span>
                 </div>
-
-                <div class="col-xs-6 col-md-6">
+                <div class="col-xs-6">
                   <input type="text" name="lastname" value="" class="form-control input-lg" placeholder="Last Name" required ng-minlength="3" ng-model="last"/>
                 </div>
-
+              </div>
+              <div class="form-group">
+                <div class="col-xs-12">
+                  <input type="text" name="username" value="" class="form-control input-lg" placeholder="Username" ng-model="username" required ng-minlength="6"/>
+                  <span ng-show="!username">Please a username longer then six characters!</span>
+                  <span ng-hide="!username">Thanks!</span>
+                </div>
               </div>
 
               <div class="form-group">
@@ -95,7 +96,7 @@
 
               <div class="form-group">
                 <div class="col-xs-12">
-                  <input type="password" name="confirm_password" value="" class="form-control input-lg" placeholder="Confirm Password" ng-model="repassword"/>
+                  <input type="password" value="" class="form-control input-lg" placeholder="Confirm Password" ng-model="repassword"/>
                 </div>
               </div>
               <div class="help-block" ng-messages="signup.name.$error" ng-show="signup.first">

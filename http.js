@@ -9,11 +9,6 @@ session = require('express-session');
 
 mongoose.connect('mongodb://localhost/success');
 
-var User = mongoose.model('login', mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
-}));
-
 passport.use(new passportLocal({usernameField: 'username', passwordField: 'password'},
   function(username, password, done) {
     console.log('How did we get here...' + username);
@@ -57,21 +52,27 @@ passport.deserializeUser(function(user, done) {
 
 app.post('/login', bodyParser.urlencoded({ extended: false }), passport.authenticate('local',{ successRedirect: '/home', failureRedirect: '/'}));
 
+var User = mongoose.model('login', mongoose.Schema({
+  firstname: { type: String, required: true },
+  lastname: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
+}));
+
 app.post('/signup', bodyParser.urlencoded({ extended: false }), function(req, res) {
-  console.log(req.body.username);
-  console.log(req.body.password);
-  /*
   new User ({
-    username: 'joe',
-    password: 'password'
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    username: req.body.username,
+    password: req.body.password
   }).save(function(err) {
     if (err) {
       console.log(err);
     }else {
       console.log('User saved successfully!');
+      res.redirect('/');
     }
   });
-*/
 });
 
 /*Above is passport redirection procedure */
@@ -100,6 +101,16 @@ app.get('/home', function(req, res) {
   if (req.isAuthenticated()) {
     res.sendFile(path.join(__dirname + '/public/html/board.html'));
   } else {
+    res.redirect('/');
+  }
+});
+
+app.get('/logout', function(req, res) {
+  if (req.isAuthenticated()) {
+    req.logout();
+    res.redirect('/');
+  } else {
+    console.log('User should have not gotten here....');
     res.redirect('/');
   }
 });
