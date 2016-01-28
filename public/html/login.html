@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <link rel="stylesheet" href="/style/login.css">
 </head>
-<body>
+<body ng-app="validationApp">
   <div class="background">
     <div id="nav" class="container" >
       <div class="row">
@@ -66,28 +66,47 @@
             <h3 class="modal-title" id="myModalLabel">Get It Done!</h3>
           </div>
           <div class="modal-body">
-            <form class="form-horizontal" action="/signup" method="post">
+
+
+            <form class="form-horizontal" action="/signup" method="post" ng-controller="signupController as user" ngform name="signup">
               <h4>It's free and always will be.</h4>
+
               <div class="form-group">
+
                 <div class="col-xs-6 col-md-6">
-                  <input type="text" name="firstname" value="" class="form-control input-lg" placeholder="First Name"/>
+                  <input type="text" name="firstname" value="" class="form-control input-lg" placeholder="First Name" ng-model="first" required ng-minlength="3"/>
+                  <span ng-show="!user.first">Please enter your first name!</span>
+                  <span ng-hide="!user.first">Thanks. Successfully validated!</span>
                 </div>
+
                 <div class="col-xs-6 col-md-6">
-                  <input type="text" name="lastname" value="" class="form-control input-lg" placeholder="Last Name"/>
+                  <input type="text" name="lastname" value="" class="form-control input-lg" placeholder="Last Name" required ng-minlength="3" ng-model="last"/>
                 </div>
+
               </div>
+
+              <div class="form-group">
+
+                <div class="col-xs-12">
+                  <input type="password" name="password" value="" class="form-control input-lg" placeholder="Password" ng-model="password" ng-minlength="6" ng-maxlength="20" ng-pattern="/^(?=.*\d).{6,20}$/" required/>
+                </div>
+
+              </div>
+
               <div class="form-group">
                 <div class="col-xs-12">
-                  <input type="password" name="password" value="" class="form-control input-lg" placeholder="Password"/>
+                  <input type="password" name="confirm_password" value="" class="form-control input-lg" placeholder="Confirm Password" ng-model="repassword"/>
                 </div>
               </div>
-              <div class="form-group">
-                <div class="col-xs-12">
-                  <input type="password" name="confirm_password" value="" class="form-control input-lg" placeholder="Confirm Password"/>
-                </div>
+              <div class="help-block" ng-messages="signup.name.$error" ng-show="signup.first">
+                <span data-ng-show="signup.password != signup.repassword">Passwords must match!</span>
+                <p>Error</p>
               </div>
-              <button class="btn btn-lg btn-primary btn-block" type="submit" disabled="disabled">Sign Up</button>
+              <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signup.$invalid || password != repassword">Sign Up</button>
             </form>
+
+
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -97,8 +116,10 @@
     </div>
 
   </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
   <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <script src="/js/login.js"></script>
+  <script src="/js/login.service.js"></script>
 </body>
 </html>

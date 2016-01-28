@@ -39,7 +39,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser(function(user, done) {
-  console.log('Authenitcated: ' + user);
+  console.log('Authenticated: ' + user);
   done(null, user);
 });
 
@@ -94,7 +94,6 @@ app.get('/', function(req, res) {
   } else {
     res.sendFile(path.join(__dirname + '/public/html/login.html'));
   }
-  console.log('Wooa!Another User!');
 });
 
 app.get('/home', function(req, res) {
@@ -105,9 +104,10 @@ app.get('/home', function(req, res) {
   }
 });
 
+app.use('/angular', express.static('node_modules/angular-route/'));
 app.use('/style',express.static('public/css')); //Route to /style for css
 app.use('/js',express.static('public/js')); //Route to /js for javascript
 app.use('/images',express.static('public/images')); //Route to /images for images
 app.use('/angular', express.static('node_modules/angular-route/'));
 
-app.listen(8080);
+app.listen(process.env.PORT || 8080);

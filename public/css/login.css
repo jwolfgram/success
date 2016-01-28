@@ -32,3 +32,16 @@
 #signup {
       background-image: linear-gradient(to bottom, #FFFFFF 0%, #D3D8E8 100%);
 }
+
+.has-error {
+  color: #FFF;
+  background: rgb(255,0,0);
+  border: 1px solid red;
+}
+
+.my-input {
+  transition:all linear 0.5s;
+  background: transparent;
+}
+
+
