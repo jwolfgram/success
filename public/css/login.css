@@ -34,14 +34,14 @@
 }
 
 .has-error {
-  color: #FFF;
-  background: rgb(255,0,0);
-  border: 1px solid red;
+    border: 2px solid rgb(255,0,0);
+    border-radius: 7px;
 }
 
-.my-input {
-  transition:all linear 0.5s;
-  background: transparent;
+.has-error:focus {
+    outline: none;
+    border-color: rgb(255,0,0);
+    box-shadow: 0 0 10px rgb(255,0,0);
 }
 
 

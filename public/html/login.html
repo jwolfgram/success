@@ -66,8 +66,6 @@
             <h3 class="modal-title" id="myModalLabel">Get It Done!</h3>
           </div>
           <div class="modal-body">
-
-
             <form class="form-horizontal" action="/signup" method="post" ng-controller="signupController as user" ngform name="signup">
               <h4>It's free and always will be.</h4>
               <div class="form-group">
@@ -80,34 +78,26 @@
               </div>
               <div class="form-group">
                 <div class="col-xs-12">
-                  <input type="text" name="username" value="" class="form-control input-lg" placeholder="Username" ng-model="username" required ng-minlength="6"/>
+                  <input type="text" name="username" value="" class="form-control input-lg" placeholder="Username" ng-model="username" required ng-minlength="6" ng-class="{ 'has-error' : signup.username.$invalid && !signup.username.$pristine }"/>
                   <span ng-show="!username">Please a username longer then six characters!</span>
-                  <span ng-hide="!username">Thanks!</span>
                 </div>
               </div>
-
               <div class="form-group">
-
                 <div class="col-xs-12">
-                  <input type="password" name="password" value="" class="form-control input-lg" placeholder="Password" ng-model="password" ng-minlength="6" ng-maxlength="20" ng-pattern="/^(?=.*\d).{6,20}$/" required/>
+                  <input type="password" name="password" value="" class="form-control input-lg" placeholder="Password" ng-model="password" ng-minlength="6" ng-maxlength="20" ng-pattern="/^(?=.*\d).{6,20}$/" required ng-class="{ 'has-error' : signup.password.$invalid && !signup.password.$pristine }"/>
+                  <span ng-show="!password">Password must be between 4 and 8 digits long and include at least one numeric digit!</span>
                 </div>
 
               </div>
 
               <div class="form-group">
                 <div class="col-xs-12">
-                  <input type="password" value="" class="form-control input-lg" placeholder="Confirm Password" ng-model="repassword"/>
+                  <input type="password" value="" class="form-control input-lg" placeholder="Confirm Password" ng-model="repassword" ng-class="{ 'has-error' : password != repassword && !signup.repassword.$pristine }"/>
+                  <span ng-show="password != repassword">Passwords must match!</span>
                 </div>
-              </div>
-              <div class="help-block" ng-messages="signup.name.$error" ng-show="signup.first">
-                <span data-ng-show="signup.password != signup.repassword">Passwords must match!</span>
-                <p>Error</p>
               </div>
               <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signup.$invalid || password != repassword">Sign Up</button>
             </form>
-
-
-
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
