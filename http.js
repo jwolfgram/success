@@ -5,9 +5,12 @@ bodyParser = require('body-parser'),
 mongoose = require('mongoose'),
 passportLocal = require('passport-local').Strategy,
 passport = require('passport'),
-session = require('express-session');
+session = require('express-session'),
+flash = require('connect-flash');
 
-mongoose.connect('mongodb://localhost/success');
+mongoose.connect('ds051625.mongolab.com:51625/success', {
+  user: 'digibitstech',
+  pass: 'applesandpeaches4life'});
 
 passport.use(new passportLocal({usernameField: 'username', passwordField: 'password'},
   function(username, password, done) {
@@ -29,7 +32,8 @@ passport.use(new passportLocal({usernameField: 'username', passwordField: 'passw
     });
   }));
 
-app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true }));
+app.use(flash());
+app.use(session({ secret: '2066618487', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -50,7 +54,7 @@ passport.deserializeUser(function(user, done) {
   });
 });
 
-app.post('/login', bodyParser.urlencoded({ extended: false }), passport.authenticate('local',{ successRedirect: '/home', failureRedirect: '/'}));
+app.post('/login', bodyParser.urlencoded({ extended: false }), passport.authenticate('local',{ successRedirect: '/home', failureRedirect: '/', failureFlash: true}));
 
 var User = mongoose.model('login', mongoose.Schema({
   firstname: { type: String, required: true },
