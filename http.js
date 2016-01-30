@@ -14,7 +14,6 @@ mongoose.connect('ds051625.mongolab.com:51625/success', {
 
 passport.use(new passportLocal({usernameField: 'username', passwordField: 'password'},
   function(username, password, done) {
-    console.log('How did we get here...' + username);
     User.find({ 'username': username }, function (err, docs) {
       if (docs.length === 0) {
         return done(err);
@@ -54,13 +53,13 @@ passport.deserializeUser(function(user, done) {
   });
 });
 
-app.post('/login', bodyParser.urlencoded({ extended: false }), passport.authenticate('local',{ successRedirect: '/home', failureRedirect: '/', failureFlash: true}));
+app.post('/', bodyParser.urlencoded({ extended: false }), passport.authenticate('local',{ successRedirect: '/home', failureRedirect: '/incorrect'}));
 
 var User = mongoose.model('login', mongoose.Schema({
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true, validate: /^(?=.*\d).{6,20}$/ }
 }));
 
 app.post('/signup', bodyParser.urlencoded({ extended: false }), function(req, res) {
@@ -101,6 +100,10 @@ app.get('/', function(req, res) {
   }
 });
 
+app.get('/incorrect', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/html/incorrectLogin.html'));
+});
+
 app.get('/home', function(req, res) {
   if (req.isAuthenticated()) {
     res.sendFile(path.join(__dirname + '/public/html/board.html'));
@@ -117,6 +120,17 @@ app.get('/logout', function(req, res) {
     console.log('User should have not gotten here....');
     res.redirect('/');
   }
+});
+
+app.get('/api/task', function(req, res) {
+  User.find({ 'username': req.user }, function (err, docs) {
+    if (docs.length === 0) {
+      console.log(err);
+    }
+    else {
+      console.log(docs[0] + ' :Foundd this...');
+    }
+  });
 });
 
 app.use('/angular', express.static('node_modules/angular-route/'));

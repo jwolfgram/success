@@ -1,36 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
   <link rel="stylesheet" href="/style/board.css">
 </head>
 <body ng-app="app">
-  <div class="container-fluid">
-    <div class="row">
-      <ul id="navtabs" class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#">Home</a></li>
-        <li role="presentation"><a href="#">Settings</a></li>
-        <div id="signout">
-          <ul class="nav nav-pills">
-            <li role="presentation" class="active"><a href="/logout">Signout</a></li>
-          </ul>
-        </div>
-      </ul>
-    </div>
-  </div>
-  <div id="homeTab">
-    <!--Angular fuuuuu! -->
-    <div ng-controller="taskController as task">
-      {{task.hello}}
-    </div>
-  </div>
-  <div id="settingTab">
-  </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-  <script src="/js/task.service.js"></script>
-  <script src="/js/board.js"></script>
+  <div ng-cloak ng-controller="cardController as card">
+    <md-content>
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Home">
+          <md-content class="md-padding">
+          <!--Card for ng-repeat-->
+            <md-card ng-cloak flex="40">
+              <md-card-title>
+                <md-card-title-text>
+                  <span class="md-headline">{{card.title}}</span>
+                  <span class="md-subhead">{{card.subtitle}}</span>
+                </md-card-title-text>
+              </md-card-title>
+            <md-card-content layout="row" layout-align="space-between" class="layout-align-space-between-stretch">
+              <div>
+                <div ng-repeat="task in card.checklist">
+                  <md-checkbox ng-click="toggle(item, selected)">
+                    {{ task }}
+                    <span ng-if="exists(item, selected)">selected</span>
+                  </md-checkbox>
+                </div>
+                <span id="addStep">+</span>
+                <span><input type="text" ng-model="item.name"/></span>
+              </div>
+              <!-- We put checklist adding ehre with class layout-coulumn?? -->
+              <md-card-actions class="layout-column float-bottom">
+                <button class="md-icon-button md-button md-ink-ripple" type="button" aria-label="Edit">
+                  <md-icon md-svg-icon="/images/board/popout.svg" class="ng-scope ng-isolate-scope" aria-label="Edit Task">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet">
+                    <path d="M0 0h18v18h-18z" fill="none"></path>
+                    <path d="M2 13.5h14v-1.5h-14v1.5zm0-4h14v-1.5h-14v1.5zm0-5.5v1.5h14v-1.5h-14z"></path>
+                  </svg>
+                  </md-icon>
+                  <md-tooltip>
+                    Edit Task
+                  </md-tooltip>
+                </button>
+                <button class="md-icon-button md-button md-ink-ripple" type="button" aria-label="Close">
+                  <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Close task">\
+                    <svg version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet"><g><g>
+                      <path fill="#7d7d7d" d="M21,11l-7-7v4C7,9,4,14,3,19c2.5-3.5,6-5.1,11-5.1V18L21,11z"></path>
+                      <rect fill="none" width="24" height="24"></rect></g></g>
+                    </svg>
+                  </md-icon>
+                  <md-tooltip>
+                    Close Task
+                  </md-tooltip>
+                </button>
+              </md-card-actions>
+            </md-card-content>
+          </md-card>
+        </md-content>
+      </md-tab>
+    <md-tab label="Settings">
+      <md-button class="md-raised md-warn"  href="/logout">Logout</md-button>
+    </md-tab>
+    </md-tabs>
+  </md-content>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.4/angular-material.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="/js/board.service.js"></script>
+<script src="/js/board.js"></script>
 </body>
 </html>
