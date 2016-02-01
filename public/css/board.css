@@ -10,21 +10,18 @@
 }
 
 #addTask {
-  width: 50px;
-  height: 50px;
-  line-height:50px;
-  border-radius: 50%;
-  background: rgb(0,128,255);
-  text-align:center;
-  text-decoration:none;
-  box-shadow: 0 0 3px gray;
-  font-size:20px;
-  font-weight:bold;
-  float:left;
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
 }
 
 .float-bottom {
   margin-top: 25%;
+}
+
+#tabs md-tab-content:first-child {
+  background: linear-gradient(to left, #00c6ff , #0072ff);
+  min-height: 100%;
 }
 
 #addStep {
@@ -40,4 +37,60 @@
   font-size:20px;
   font-weight:bold;
   float:left;
+}
+
+.splash {
+  display: none;
+}
+
+[ng-cloak].splash {
+  background-color: #428bca;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  color: white;
+  display: block !important;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.spinner {
+  animation: rotate 2s linear infinite;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+  width: 50px;
+  height: 50px;
+
+  & .path {
+    stroke: rgb(255, 0, 0);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
 }

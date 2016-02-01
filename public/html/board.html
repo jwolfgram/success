@@ -5,11 +5,17 @@
   <link rel="stylesheet" href="/style/board.css">
 </head>
 <body ng-app="app">
-  <div ng-cloak ng-controller="cardController as card">
-    <md-content>
-      <md-tabs md-dynamic-height md-border-bottom>
-        <md-tab label="Home">
-          <md-content class="md-padding">
+  <div ng-cloak ng-controller="cardController as card" layout="column" layout-fill>
+    <!-- Loading spinnger CSS, needs work if there is enough time to view it -->
+    <div class="splash" ng-cloak="">
+        <svg class="spinner" viewBox="0 0 50 50">
+          <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+        </svg>
+    </div>
+    <md-content layout="column" flex>
+      <md-tabs id="tabs" layout="column" flex>
+        <md-tab flex layout="column" label="Home">
+          <md-tab-content md-padding>
           <!--Card for ng-repeat-->
             <md-card ng-cloak flex="40">
               <md-card-title>
@@ -18,49 +24,63 @@
                   <span class="md-subhead">{{card.subtitle}}</span>
                 </md-card-title-text>
               </md-card-title>
-            <md-card-content layout="row" layout-align="space-between" class="layout-align-space-between-stretch">
-              <div>
-                <div ng-repeat="task in card.checklist">
-                  <md-checkbox ng-click="toggle(item, selected)">
-                    {{ task }}
-                    <span ng-if="exists(item, selected)">selected</span>
-                  </md-checkbox>
+              <md-card-content layout="row" layout-align="space-between" class="layout-align-space-between-stretch">
+                <div>
+                  <div ng-repeat="task in card.checklist">
+                    <md-checkbox ng-click="toggle(item, selected)">
+                      {{ task }}
+                      <span ng-if="exists(item, selected)">selected</span>
+                    </md-checkbox>
+                  </div>
+                  <md-button class="md-icon-button" aria-label="Add Step">
+                    <md-icon md-svg-src="/images/board/add.svg"></md-icon>
+                    <md-tooltip>
+                      Add Step
+                    </md-tooltip>
+                  </md-button>
+                  <md-input-container>
+                    <label>New Step</label>
+                    <input type="text" ng-model="item.addStep" required>
+                  </md-input-container>
                 </div>
-                <span id="addStep">+</span>
-                <span><input type="text" ng-model="item.name"/></span>
-              </div>
-              <!-- We put checklist adding ehre with class layout-coulumn?? -->
-              <md-card-actions class="layout-column float-bottom">
-                <button class="md-icon-button md-button md-ink-ripple" type="button" aria-label="Edit">
-                  <md-icon md-svg-icon="/images/board/popout.svg" class="ng-scope ng-isolate-scope" aria-label="Edit Task">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet">
-                    <path d="M0 0h18v18h-18z" fill="none"></path>
-                    <path d="M2 13.5h14v-1.5h-14v1.5zm0-4h14v-1.5h-14v1.5zm0-5.5v1.5h14v-1.5h-14z"></path>
-                  </svg>
-                  </md-icon>
-                  <md-tooltip>
-                    Edit Task
-                  </md-tooltip>
-                </button>
-                <button class="md-icon-button md-button md-ink-ripple" type="button" aria-label="Close">
-                  <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Close task">\
-                    <svg version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet"><g><g>
-                      <path fill="#7d7d7d" d="M21,11l-7-7v4C7,9,4,14,3,19c2.5-3.5,6-5.1,11-5.1V18L21,11z"></path>
-                      <rect fill="none" width="24" height="24"></rect></g></g>
-                    </svg>
-                  </md-icon>
-                  <md-tooltip>
-                    Close Task
-                  </md-tooltip>
-                </button>
-              </md-card-actions>
-            </md-card-content>
-          </md-card>
-        </md-content>
+                <!-- We put checklist adding ehre with class layout-coulumn?? -->
+                <md-card-actions class="layout-column float-bottom">
+                  <button class="md-icon-button md-button" md-ink-ripple type="button" aria-label="Edit">
+                    <md-icon md-svg-icon="/images/board/popout.svg" class="ng-scope ng-isolate-scope" aria-label="Edit Task">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet">
+                        <path d="M0 0h18v18h-18z" fill="none"></path>
+                        <path d="M2 13.5h14v-1.5h-14v1.5zm0-4h14v-1.5h-14v1.5zm0-5.5v1.5h14v-1.5h-14z"></path>
+                      </svg>
+                    </md-icon>
+                    <md-tooltip>
+                      Edit Task
+                    </md-tooltip>
+                  </button>
+                  <button class="md-icon-button md-button" md-ink-ripple  type="button" aria-label="Close">
+                    <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Close task">\
+                      <svg version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet"><g><g>
+                        <path fill="#7d7d7d" d="M21,11l-7-7v4C7,9,4,14,3,19c2.5-3.5,6-5.1,11-5.1V18L21,11z"></path>
+                        <rect fill="none" width="24" height="24"></rect></g></g>
+                      </svg>
+                    </md-icon>
+                    <md-tooltip>
+                      Close Task
+                    </md-tooltip>
+                  </button>
+                </md-card-actions>
+              </md-card-content>
+            </md-card>
+          <md-button id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.newTask($event)">
+            <md-icon md-svg-src="/images/board/task.svg" style="display: inline;"></md-icon>
+            <md-tooltip>
+              New Task
+            </md-tooltip>
+          </md-button>
+        </md-tab-content>
       </md-tab>
-    <md-tab label="Settings">
-      <md-button class="md-raised md-warn"  href="/logout">Logout</md-button>
-    </md-tab>
+      <md-tab label="Settings">
+        <md-button class="md-raised md-warn"  href="/logout">Logout</md-button>
+      </md-tab>
     </md-tabs>
   </md-content>
 </div>

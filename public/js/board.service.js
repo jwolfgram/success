@@ -28,7 +28,7 @@ app.factory('stepsService', ['$http',function($http) {
   };
 }]);
 
-app.controller('cardController', function($scope, taskService, stepsService) {
+app.controller('cardController', function($scope, $mdMedia, $mdDialog, taskService, stepsService) {
   vm = this;
   vm.title = 'Title';
   vm.subtitle = 'Subtitle';
@@ -38,4 +38,25 @@ app.controller('cardController', function($scope, taskService, stepsService) {
     vm.request = resp.data;
   });
 */
+
+  vm.newTask = function showDialog($event) {
+    var parentEl = angular.element(document.body);
+      $mdDialog.show({
+      parent: parentEl,
+      targetEvent: $event,
+      templateUrl: '/angular/template/newTask.html',
+      controller: DialogController
+    });
+  };
+
+
+  function DialogController($scope, $mdDialog) {
+    $scope.closeDialog = function() {
+      $mdDialog.hide();
+    };
+    $scope.submitTask = function() {
+      $mdDialog.hide();
+    };
+  }
+
 });
