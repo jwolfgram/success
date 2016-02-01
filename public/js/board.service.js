@@ -32,12 +32,19 @@ app.controller('cardController', function($scope, $mdMedia, $mdDialog, taskServi
   vm = this;
   vm.title = 'Title';
   vm.subtitle = 'Subtitle';
-  vm.checklist = ['First task',2,3,4,5];
+  vm.checklist = ['Step 1'];
   /*
   stepsService.data().then(function(resp) {
     vm.request = resp.data;
   });
 */
+  $scope.cardsteps = ['Step 1'];
+  $scope.addNewcardStep = function() {
+    console.log($scope.cardsteps);
+    var newItemNo = $scope.cardsteps.length+1;
+    $scope.cardsteps.push(vm.addStep);
+  };
+
 
   vm.newTask = function showDialog($event) {
     var parentEl = angular.element(document.body);
@@ -59,4 +66,16 @@ app.controller('cardController', function($scope, $mdMedia, $mdDialog, taskServi
     };
   }
 
+});
+
+app.controller('newTaskController', function($scope, taskService, stepsService) {
+  vm = this;
+  $scope.steps = ['Step 1'];
+  $scope.addNewStep = function() {
+    console.log('Button clicked');
+    console.log(vm.title);
+    console.log($scope.steps);
+    var newItemNo = $scope.steps.length+1;
+    $scope.steps.push('Step '+newItemNo);
+  };
 });

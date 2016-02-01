@@ -1,4 +1,4 @@
-<md-dialog aria-label="New Task" ng-cloak>
+<md-dialog aria-label="New Task" ng-cloak ng-app="app">
   <form>
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -9,17 +9,37 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-dialog-content>
-      <div class="md-dialog-content">
-
+    <md-dialog-content ng-controller="newTaskController as task">
+      <div class="md-dialog-content" layout-align="center center" layout="column">
+        <form name="newTask" data-ng-submit="sendTask()">
+          <div layout="row">
+            <md-input-container>
+              <label>Task Name:</label>
+              <input type="text" ng-model="taskName">
+            </md-input-container>
+            <md-input-container>
+              <label>Description:</label>
+              <textarea type="text" data-ng-model="taskNote"></textarea>
+            </md-input-container>
+          </div>
+          <div layout="row" layout-align="start end">
+            <div layout="column" layout-align="start start">
+              <md-input-container data-ng-repeat="step in steps" layout-align="start start">
+                <label>{{step}}</label>
+                <input type="text" mg-model="task.newTask">
+              </md-input-container>
+            </div>
+            <md-button md-no-ink class="md-primary" ng-click="addNewStep()">Add Step</md-button>
+          </div>
+        </form>
       </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
       <md-button ng-click="closeDialog()">
-       Cancel
+        Cancel
       </md-button>
-      <md-button ng-click="submitTask()" style="margin-right:20px;">
+      <md-button ng-click="submitTask()" type="submit" style="margin-right:20px;">
         Save
       </md-button>
     </md-dialog-actions>

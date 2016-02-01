@@ -14,37 +14,43 @@
     </div>
     <md-content layout="column" flex>
       <md-tabs id="tabs" layout="column" flex>
-        <md-tab flex layout="column" label="Home">
-          <md-tab-content md-padding>
+        <md-tab layout="column" label="Home" flex>
+          <md-tab-content md-padding layout="column" flex-xs="80" flex-sm="40" flex-md="30" flex-lg="30" flex-xl="20"  layout-wrap>
           <!--Card for ng-repeat-->
-            <md-card ng-cloak flex="40">
+            <md-card ng-cloak class="card">
               <md-card-title>
                 <md-card-title-text>
                   <span class="md-headline">{{card.title}}</span>
                   <span class="md-subhead">{{card.subtitle}}</span>
                 </md-card-title-text>
               </md-card-title>
-              <md-card-content layout="row" layout-align="space-between" class="layout-align-space-between-stretch">
+              <md-card-content layout="row" layout-align="space-around start" class="layout-align-space-between-stretch">
                 <div>
-                  <div ng-repeat="task in card.checklist">
+                  <div ng-repeat="step in cardsteps">
                     <md-checkbox ng-click="toggle(item, selected)">
-                      {{ task }}
+                      {{step}}
                       <span ng-if="exists(item, selected)">selected</span>
                     </md-checkbox>
                   </div>
-                  <md-button class="md-icon-button" aria-label="Add Step">
+
+
+
+                  <md-button class="md-icon-button" aria-label="Add Step" ng-click="addNewcardStep()">
                     <md-icon md-svg-src="/images/board/add.svg"></md-icon>
                     <md-tooltip>
                       Add Step
                     </md-tooltip>
                   </md-button>
                   <md-input-container>
-                    <label>New Step</label>
-                    <input type="text" ng-model="item.addStep" required>
+                    <label>Add new step</label>
+                    <input type="text" ng-model="card.addStep" required>
                   </md-input-container>
+
+
+
                 </div>
                 <!-- We put checklist adding ehre with class layout-coulumn?? -->
-                <md-card-actions class="layout-column float-bottom">
+                <md-card-actions layout="column" layout-align="end end" flex>
                   <button class="md-icon-button md-button" md-ink-ripple type="button" aria-label="Edit">
                     <md-icon md-svg-icon="/images/board/popout.svg" class="ng-scope ng-isolate-scope" aria-label="Edit Task">
                       <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet">
