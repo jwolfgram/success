@@ -2,7 +2,7 @@
   <form>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <h2>New Task</h2>
+        <h2>Create Task</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
           <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
@@ -11,7 +11,7 @@
     </md-toolbar>
     <md-dialog-content ng-controller="newTaskController as task">
       <div class="md-dialog-content" layout-align="center center" layout="column">
-        <form name="newTask" data-ng-submit="sendTask()">
+        <form name="newTask" data-ng-submit="task.sendTask()">
           <div layout="row">
             <md-input-container>
               <label>Task Name:</label>
@@ -24,12 +24,12 @@
           </div>
           <div layout="row" layout-align="start end">
             <div layout="column" layout-align="start start">
-              <md-input-container data-ng-repeat="step in steps" layout-align="start start">
+              <md-input-container data-ng-repeat="step in task.steps" layout-align="start start">
                 <label>{{step}}</label>
-                <input type="text" mg-model="task.newTask">
+                <input type="text" mg-model="task.newTask" ng-keyup="$event.keyCode == 13 ? task.addNewStep() : null">
               </md-input-container>
             </div>
-            <md-button md-no-ink class="md-primary" ng-click="addNewStep()">Add Step</md-button>
+            <md-button md-no-ink class="md-primary" ng-click="task.addNewStep()">Add Step</md-button>
           </div>
         </form>
       </div>

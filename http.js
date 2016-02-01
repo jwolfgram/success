@@ -136,9 +136,30 @@ Contact.findByIdAndUpdate(
     }
 );*/
 
-app.get('/api/task', function(req, res) {
+app.get('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
+  res.sendFile(path.join(__dirname + '/public/html/login.html'));
+});
 
+app.post('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
+Contact.findByIdAndUpdate(
+  info._id,
+  {$push: {"messages": {title: 'title', msg: 'msg'}}},
+  {safe: true, upsert: true},
+  function(err, model) {
+    console.log(err);
+  }
+).save(function(err) {
+    if (err) {
+      console.log(err);
+    }else {
+      console.log('Task saved successfully!');
+    }
   });
+});
+
+app.post('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
+
+});
 
 
 

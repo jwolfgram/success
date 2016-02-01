@@ -21,12 +21,17 @@
   bottom: 0;
 }
 
+.button-shadow {
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+  border-radius: 50%;
+}
+
 .card {
   position: relative;
 }
 
 #tabs md-tab-content:first-child {
-  background: linear-gradient(to bottom, #00c6ff , #0072ff);
+  background: linear-gradient(to bottom, #0072ff, #00c6ff);
   min-height: 100%;
 }
 
@@ -45,39 +50,26 @@
   float:left;
 }
 
-.splash {
+.spinner {
   display: none;
 }
 
-[ng-cloak].splash {
-  background-color: #428bca;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  color: white;
-  display: block !important;
-  z-index: 2;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-
-.spinner {
+[ng-cloak].spinner {
   animation: rotate 2s linear infinite;
-  z-index: 2;
+  z-index: 3;
   position: absolute;
   top: 50%;
   left: 50%;
   margin: -25px 0 0 -25px;
   width: 50px;
   height: 50px;
+}
 
-  & .path {
-    stroke: rgb(255, 0, 0);
-    stroke-linecap: round;
-    animation: dash 1.5s ease-in-out infinite;
-  }
-
+.spinner .path {
+  stroke: red;
+  stroke-linecap: round;
+  -webkit-animation: dash 1.5s ease-in-out infinite;
+          animation: dash 1.5s ease-in-out infinite;
 }
 
 @keyframes rotate {

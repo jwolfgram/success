@@ -3,9 +3,9 @@ var app = angular.module('app', ['ngMaterial', 'ngMessages']);
 app.factory('taskService', ['$http',function($http) {
   return {
     getTasks : function() {
-      return $http.get('/api/todos');
+      return $http.get('/api/task');
     },
-    createTask : function(todoData) {
+    createTask : function(taskData) {
       return $http.post('/api/todos', todoData);
     },
     deleteTask : function(id) {
@@ -13,6 +13,7 @@ app.factory('taskService', ['$http',function($http) {
     }
   };
 }]);
+
 
 app.factory('stepsService', ['$http',function($http) {
   return {
@@ -28,26 +29,27 @@ app.factory('stepsService', ['$http',function($http) {
   };
 }]);
 
-app.controller('cardController', function($scope, $mdMedia, $mdDialog, taskService, stepsService) {
+app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, taskService, stepsService) {
   vm = this;
   vm.title = 'Title';
   vm.subtitle = 'Subtitle';
-  vm.checklist = ['Step 1'];
   /*
   stepsService.data().then(function(resp) {
     vm.request = resp.data;
   });
 */
-  $scope.cardsteps = ['Step 1'];
-  $scope.addNewcardStep = function() {
-    console.log($scope.cardsteps);
-    var newItemNo = $scope.cardsteps.length+1;
-    $scope.cardsteps.push(vm.addStep);
+  vm.stepArray = [];
+  vm.addNewcardStep = function() {
+    console.log(vm.stepArray);
+    var newItemNo = vm.stepArray.length+1;
+    vm.stepArray.push(vm.addStep);
+    vm.addStep = null;
   };
 
 
   vm.newTask = function showDialog($event) {
     var parentEl = angular.element(document.body);
+    console.log($mdDialog);
       $mdDialog.show({
       parent: parentEl,
       targetEvent: $event,
@@ -66,16 +68,20 @@ app.controller('cardController', function($scope, $mdMedia, $mdDialog, taskServi
     };
   }
 
-});
+}]);
 
-app.controller('newTaskController', function($scope, taskService, stepsService) {
+app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', function($scope, taskService, stepsService) {
   vm = this;
-  $scope.steps = ['Step 1'];
-  $scope.addNewStep = function() {
+  vm.steps = [];
+  vm.addNewStep = function() {
     console.log('Button clicked');
     console.log(vm.title);
-    console.log($scope.steps);
-    var newItemNo = $scope.steps.length+1;
-    $scope.steps.push('Step '+newItemNo);
+    console.log(vm.steps);
+    var newItemNo = vm.steps.length+1;
+    vm.steps.push('Step '+newItemNo);
   };
-});
+
+  vm.sendTask = function() {
+    console.log('Form submitted... send to node for mongo!');
+  };
+}]);
