@@ -134,14 +134,16 @@ Contact.findByIdAndUpdate(
     function(err, model) {
         console.log(err);
     }
-);*/
+    );*/
 
 app.get('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
   res.sendFile(path.join(__dirname + '/public/html/login.html'));
 });
 
-app.post('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
-Contact.findByIdAndUpdate(
+app.post('/api/task', bodyParser.json(), function(req, res) { //This will send the users task along with the steps for ng-repete to display
+  console.log('WT WTF');
+  console.log(req.body);
+/*Contact.findByIdAndUpdate(
   info._id,
   {$push: {"messages": {title: 'title', msg: 'msg'}}},
   {safe: true, upsert: true},
@@ -154,10 +156,10 @@ Contact.findByIdAndUpdate(
     }else {
       console.log('Task saved successfully!');
     }
-  });
+  });*/
 });
 
-app.post('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
+app.post('/api/step', function(req, res) { //This will send the users task along with the steps for ng-repete to display
 
 });
 
@@ -177,7 +179,7 @@ app.post('/api/task', function(req, res) { //This will send the users task along
       console.log('User saved successfully!');
       res.redirect('/');
     }
-    });*/
+  });*/
 app.use('/angular/template/', express.static('public/angularTemplates'));
 app.use('/angular', express.static('node_modules/angular-route/'));
 app.use('/style',express.static('public/css')); //Route to /style for css

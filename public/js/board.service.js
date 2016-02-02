@@ -5,8 +5,8 @@ app.factory('taskService', ['$http',function($http) {
     getTasks : function() {
       return $http.get('/api/task');
     },
-    createTask : function(taskData) {
-      return $http.post('/api/todos', todoData);
+    sendTask : function(taskData) {
+      return $http.post('/api/task', taskData);
     },
     deleteTask : function(id) {
       return $http.delete('/api/todos/' + id);
@@ -20,7 +20,7 @@ app.factory('stepsService', ['$http',function($http) {
     getSteps : function() {
       return $http.get('/api/todos');
     },
-    createStep : function(todoData) {
+    sendStep : function(todoData) {
       return $http.post('/api/todos', todoData);
     },
     deleteStep : function(id) {
@@ -33,15 +33,10 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
   vm = this;
   vm.title = 'Title';
   vm.subtitle = 'Subtitle';
-  /*
-  stepsService.data().then(function(resp) {
-    vm.request = resp.data;
-  });
-*/
   vm.stepArray = [];
   vm.addNewcardStep = function() {
-    console.log(vm.stepArray);
-    var newItemNo = vm.stepArray.length+1;
+    vm.newStep = String(vm.stepArray.length+1);
+    console.log(vm.addStep); //Send vm.addStep to $http nodejs
     vm.stepArray.push(vm.addStep);
     vm.addStep = null;
   };
@@ -49,7 +44,6 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
 
   vm.newTask = function showDialog($event) {
     var parentEl = angular.element(document.body);
-    console.log($mdDialog);
       $mdDialog.show({
       parent: parentEl,
       targetEvent: $event,
@@ -73,15 +67,20 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
 app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', function($scope, taskService, stepsService) {
   vm = this;
   vm.steps = [];
+
+
+  vm.sendTask = function() {
+    console.log('Attempting to send data...');
+    console.log(vm.taskName);
+    taskService.sendTask({"name": vm.taskName, "note": vm.taskNote}); //SENDING NEW TASK!!!!
+  };
+
+
+
   vm.addNewStep = function() {
     console.log('Button clicked');
-    console.log(vm.title);
     console.log(vm.steps);
     var newItemNo = vm.steps.length+1;
     vm.steps.push('Step '+newItemNo);
-  };
-
-  vm.sendTask = function() {
-    console.log('Form submitted... send to node for mongo!');
   };
 }]);
