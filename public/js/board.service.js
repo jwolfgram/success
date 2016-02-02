@@ -83,7 +83,9 @@ app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', fu
     console.log(vm.steps);
     vm.newTask = String(vm.steps.length+1);
     console.log(vm.newTask);
-    vm.steps.push({step:[{id : 'step'+vm.newTask},{label:'Step '+vm.newTask}]});
-
+    var newStep = {};
+    newStep.id = 'step' + vm.newTask;
+    newStep.label = 'Step ' + vm.newTask;
+    vm.steps.push(newStep);
   };
 }]);

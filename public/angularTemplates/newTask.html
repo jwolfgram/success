@@ -24,14 +24,12 @@
           <div layout="row" layout-align="start end">
             <div layout="column" layout-align="start start">
               <div data-ng-repeat="step in task.steps">
-                <div data-ng-repeat="data in step">
-                  <div data-ng-repeat="label in data">
+
                     <md-input-container layout-align="start start">
-                      <label>{{label.label}}</label>
-                      <input type="text" name={{label.id}} ng-keyup="$event.keyCode == 13 ? task.addNewStep() : null">
+                      <label>{{step.label}}</label>
+                      <input type="text" name={{step.id}} ng-keyup="$event.keyCode == 13 ? task.addNewStep() : null">
                     </md-input-container>
-                  </div>
-                </div>
+
               </div>
             </div>
             <md-button md-no-ink class="md-primary" ng-click="task.addNewStep()">Add Step</md-button>
