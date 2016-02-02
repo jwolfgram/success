@@ -1,4 +1,5 @@
 <md-dialog aria-label="New Task" ng-cloak ng-app="app" ng-controller="newTaskController as task">
+  <form id="task-form" action="/api/task" method="post">
     <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Create Task</h2>
@@ -10,31 +11,27 @@
     </md-toolbar>
     <md-dialog-content>
       <div class="md-dialog-content" layout-align="center center" layout="column">
-        <form name="newTask">
           <div layout="row">
             <md-input-container>
               <label>Task Name:</label>
-              <input type="text" ng-model="task.taskName">
+              <input type="text" name="taskname">
             </md-input-container>
             <md-input-container>
               <label>Description:</label>
-              <textarea type="text" data-ng-model="task.taskNote"></textarea>
+              <textarea type="text" name="taskdescription"></textarea>
             </md-input-container>
           </div>
           <div layout="row" layout-align="start end">
             <div layout="column" layout-align="start start">
               <div data-ng-repeat="step in task.steps">
-
-                    <md-input-container layout-align="start start">
-                      <label>{{step.label}}</label>
-                      <input type="text" name={{step.id}} ng-keyup="$event.keyCode == 13 ? task.addNewStep() : null">
-                    </md-input-container>
-
+                <md-input-container layout-align="start start">
+                  <label>{{step.label}}</label>
+                  <input type="text" name="step" ng-keyup="$event.keyCode == 13 ? task.addNewStep() : null">
+                </md-input-container>
               </div>
             </div>
             <md-button md-no-ink class="md-primary" ng-click="task.addNewStep()">Add Step</md-button>
           </div>
-        </form>
       </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">
@@ -42,8 +39,10 @@
       <md-button ng-click="closeDialog()">
         Cancel
       </md-button>
-      <md-button ng-click="task.sendTask()" style="margin-right:20px;">
+      <button class="md-button md-ink-ripple" id="save-task" style="margin-right:20px;">
         Save
-      </md-button>
+      </button>
     </md-dialog-actions>
-  </md-dialog>
+  </form>
+</md-dialog>
+<script src="/js/board.js"></script>

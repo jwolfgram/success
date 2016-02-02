@@ -115,48 +115,37 @@ app.get('/incorrect', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/html/incorrectLogin.html'));
 });
 
-var Task = mongoose.model('task', mongoose.Schema({
-  username: { type: String, required: true },
+var Task = mongoose.model('step', mongoose.Schema({
+  username: { type: String, required: true }, //Required but not unique becasue it should already exits
   task: { type: String, required: true },
+  description: { type: String, required: true },
+  steps: { type: String, required: true } //Saddly... we have to have this in an array defining the task associated with
 }), 'accounts');
 
-var Step = mongoose.model('step', mongoose.Schema({
-  username: { type: String, required: true },
-  $push: {"step": {type: String, checked: 'title', msg: 'msg'}},
-  task: { type: String, required: true },
-}), 'accounts');
-
-/*
-Contact.findByIdAndUpdate(
-    info._id,
-    {$push: {"messages": {title: 'title', msg: 'msg'}}},
-    {safe: true, upsert: true},
-    function(err, model) {
-        console.log(err);
-    }
-    );*/
+/*  $push: {"step": {type: String, checked: 'title', msg: 'msg'}}
+*/
 
 app.get('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
   res.sendFile(path.join(__dirname + '/public/html/login.html'));
 });
 
-app.post('/api/task', bodyParser.json(), function(req, res) { //This will send the users task along with the steps for ng-repete to display
-  console.log('WT WTF');
+app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, res) { //This will send the users task along with the steps for ng-repete to display
+  console.log(req.user);
   console.log(req.body);
-/*Contact.findByIdAndUpdate(
-  info._id,
-  {$push: {"messages": {title: 'title', msg: 'msg'}}},
-  {safe: true, upsert: true},
-  function(err, model) {
-    console.log(err);
-  }
-).save(function(err) {
-    if (err) {
-      console.log(err);
-    }else {
-      console.log('Task saved successfully!');
+  console.log(req.body.step.length);
+
+  Task.findOneAndUpdate(
+  {'username': req.user},
+  {$push: {task: {'task': req.body.taskname, 'step': req.body.step, 'description': req.body.taskdescription}}},
+   function (err, docs) {
+    if (docs.length === 0) {
+      return done(err); //Possibly if it will not make on its own, create new task
+    } else {
+      console.log(docs);
     }
-  });*/
+  });
+
+  res.redirect('/home');
 });
 
 app.post('/api/step', function(req, res) { //This will send the users task along with the steps for ng-repete to display
