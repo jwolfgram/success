@@ -72,6 +72,7 @@ app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', fu
   vm.sendTask = function() {
     console.log('Attempting to send data...');
     console.log(vm.taskName);
+    console.log(vm.newStep[0]);
     taskService.sendTask({"name": vm.taskName, "note": vm.taskNote}); //SENDING NEW TASK!!!!
   };
 
@@ -80,7 +81,9 @@ app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', fu
   vm.addNewStep = function() {
     console.log('Button clicked');
     console.log(vm.steps);
-    var newItemNo = vm.steps.length+1;
-    vm.steps.push('Step '+newItemNo);
+    vm.newTask = String(vm.steps.length+1);
+    console.log(vm.newTask);
+    vm.steps.push({'step':[{'id' : 'step'+vm.newTask},{'label':'Step '+vm.newTask}]});
+
   };
 }]);
