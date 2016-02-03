@@ -5,9 +5,6 @@ app.factory('taskService', ['$http',function($http) {
     getTasks : function() {
       return $http.get('/api/task');
     },
-    sendTask : function(taskData) {
-      return $http.post('/api/task', taskData);
-    },
     deleteTask : function(id) {
       return $http.delete('/api/todos/' + id);
     }
@@ -41,6 +38,10 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
     vm.addStep = null;
   };
 
+  taskService.getTasks().then(function(resp) {
+    console.log(resp.data); //Fix this
+  });
+
 
   vm.newTask = function showDialog($event) {
     var parentEl = angular.element(document.body);
@@ -67,21 +68,11 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
 app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', function($scope, taskService, stepsService) {
   vm = this;
   vm.steps = [];
-
-
-  vm.sendTask = function() {
-    console.log('Attempting to send data...');
-    console.log(vm.taskName);
-    console.log(vm.newStep[0]);
-    taskService.sendTask({"name": vm.taskName, "note": vm.taskNote}); //SENDING NEW TASK!!!!
-  };
-
-
-
   vm.addNewStep = function() {
     vm.newTask = String(vm.steps.length+1);
     console.log(vm.newTask);
     var newStep = {};
+    newStep.id = 'step' + vm.newTask;
     newStep.label = 'Step ' + vm.newTask;
     vm.steps.push(newStep);
   };

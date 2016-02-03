@@ -117,16 +117,19 @@ app.get('/incorrect', function(req, res) {
 
 var Task = mongoose.model('step', mongoose.Schema({
   username: { type: String, required: true }, //Required but not unique becasue it should already exits
-  task: { type: String, required: true },
-  description: { type: String, required: true },
-  steps: { type: String, required: true } //Saddly... we have to have this in an array defining the task associated with
+  tasks: { type: String, required: true }
 }), 'accounts');
 
-/*  $push: {"step": {type: String, checked: 'title', msg: 'msg'}}
-*/
-
 app.get('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
-  res.sendFile(path.join(__dirname + '/public/html/login.html'));
+  Task.find({ 'username': 'jwolfgram' }, function (err, docs) { //req.user
+    if (docs.length === 0) {
+      console.log(err);
+    }
+    else {
+      console.log('got else!');
+      res.json(docs[0].tasks); //is sending, front end will need
+    }
+  });
 });
 
 app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, res) { //This will send the users task along with the steps for ng-repete to display
@@ -135,10 +138,10 @@ app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, 
   console.log(req.body.step.length);
 
   Task.findOneAndUpdate(
-  {'username': req.user},
-  {$push: {task: {'task': req.body.taskname, 'step': req.body.step, 'description': req.body.taskdescription}}},
-   function (err, docs) {
-    if (docs.length === 0) {
+    {'username': req.user},
+    {$push: {tasks: {'task': req.body.taskname, 'step': req.body.step, 'description': req.body.taskdescription}}},
+    function (err, docs) {
+      if (docs.length === 0) {
       return done(err); //Possibly if it will not make on its own, create new task
     } else {
       console.log(docs);
@@ -148,27 +151,10 @@ app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, 
   res.redirect('/home');
 });
 
-app.post('/api/step', function(req, res) { //This will send the users task along with the steps for ng-repete to display
-
+app.post('/api/step', function(req, res) {
+//This will send the users task along with the steps for ng-repete to display
 });
 
-
-
-
-
-  /*new Task ({
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    username: req.body.username,
-    password: req.body.password
-  }).save(function(err) {
-    if (err) {
-      console.log(err);
-    }else {
-      console.log('User saved successfully!');
-      res.redirect('/');
-    }
-  });*/
 app.use('/angular/template/', express.static('public/angularTemplates'));
 app.use('/angular', express.static('node_modules/angular-route/'));
 app.use('/style',express.static('public/css')); //Route to /style for css
