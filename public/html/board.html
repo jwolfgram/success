@@ -12,21 +12,23 @@
       </svg>
     <md-content layout="column" flex>
       <md-tabs id="tabs" layout="column" flex>
-        <md-tab layout="column" label="Home" flex>
-          <md-tab-content md-padding layout="column" flex-xs="80" flex-sm="40" flex-md="30" flex-lg="30" flex-xl="20"  layout-wrap>
+        <md-tab layout="column" label="Home" flex-xs="80" flex-sm="40" flex-md="30" flex-lg="30" flex-xl="20"  flex>
+          <md-tab-content md-padding layout="column" layout-wrap>
           <!--Card for ng-repeat-->
-            <md-card ng-cloak class="card">
+
+
+            <md-card ng-cloak ng-repeat="text in card.card" class="card">
               <md-card-title>
                 <md-card-title-text>
-                  <span class="md-headline">{{card.title}}</span>
-                  <span class="md-subhead">{{card.subtitle}}</span>
+                  <span class="md-headline">{{text.task}}</span>
+                  <span class="md-subhead">{{text.description}}</span>
                 </md-card-title-text>
               </md-card-title>
               <md-card-content layout="row" layout-align="space-around start" class="layout-align-space-between-stretch">
                 <div>
-                  <div ng-repeat="step in card.stepArray">
-                    <md-checkbox>
-                      {{step}}
+                  <div ng-repeat="step in text.step.step">
+                    <md-checkbox checked={{step.checked}}>
+                      {{step.step}}
                     </md-checkbox>
                   </div>
                   <md-button class="md-icon-button" aria-label="Add Step" ng-click="card.addNewcardStep()">
@@ -67,6 +69,8 @@
                 </md-card-actions>
               </md-card-content>
             </md-card>
+
+
           <md-button id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.newTask($event)">
             <md-icon md-svg-src="/images/board/task.svg" style="display: inline;"></md-icon>
             <md-tooltip>

@@ -28,18 +28,17 @@ app.factory('stepsService', ['$http',function($http) {
 
 app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, taskService, stepsService) {
   vm = this;
-  vm.title = 'Title';
-  vm.subtitle = 'Subtitle';
-  vm.stepArray = [];
   vm.addNewcardStep = function() {
-    vm.newStep = String(vm.stepArray.length+1);
+    vm.card.step[0].step.step.push = {checked: false, step: String(vm.card.step.step.length+1)}; //in a sub array... hhmm
     console.log(vm.addStep); //Send vm.addStep to $http nodejs
-    vm.stepArray.push(vm.addStep);
+    vm.card.step.push(vm.addStep);
     vm.addStep = null;
   };
 
   taskService.getTasks().then(function(resp) {
     console.log(resp.data); //Fix this
+    vm.card = resp.data;
+    console.log(vm.card[0].step.step);
   });
 
 

@@ -117,7 +117,7 @@ app.get('/incorrect', function(req, res) {
 
 var Task = mongoose.model('step', mongoose.Schema({
   username: { type: String, required: true }, //Required but not unique becasue it should already exits
-  tasks: { type: String, required: true }
+  tasks: { 'task':'string','description':'string', 'step':'array' }
 }), 'accounts');
 
 app.get('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
@@ -134,12 +134,18 @@ app.get('/api/task', function(req, res) { //This will send the users task along 
 
 app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, res) { //This will send the users task along with the steps for ng-repete to display
   console.log(req.user);
-  console.log(req.body);
-  console.log(req.body.step.length);
-
+  console.log(req.body); //break req.body.step into array before pushing
+  var step = [];
+  for (var i = 0;i < req.body.step.length;i++) {
+    console.log(req.body.step[i]);
+    step.push({'step': req.body.step[i],'checked': true});
+    //step.step = ;
+    //step.checked = false;
+    console.log(step);
+  }
   Task.findOneAndUpdate(
     {'username': req.user},
-    {$push: {tasks: {'task': req.body.taskname, 'step': req.body.step, 'description': req.body.taskdescription}}},
+    {$push: {tasks: {'task': req.body.taskname, 'step': {'step': step}, 'description': req.body.taskdescription}}},
     function (err, docs) {
       if (docs.length === 0) {
       return done(err); //Possibly if it will not make on its own, create new task
