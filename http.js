@@ -134,9 +134,10 @@ app.get('/api/task', function(req, res) { //This will send the users task along 
 
 app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, res) { //This will send the users task along with the steps for ng-repete to display
   console.log(req.user);
-  console.log(req.body); //break req.body.step into array before pushing
+  console.log(req.body.step); //break req.body.step into array before pushing
+  console.log(typeof req.body.step);
   var step = []; //needs to not add each word in array....
-  if (req.body.step === Array) {
+  if (typeof req.body.step === 'object') {
     for (var i = 0;i < req.body.step.length;i++) {
       console.log(req.body.step[i]);
       step.push({'step': req.body.step[i],'checked': false});
@@ -152,7 +153,7 @@ app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, 
     {$push: {tasks: {'task': req.body.taskname, 'step': {'step': step}, 'description': req.body.taskdescription}}},
     function (err, docs) {
       if (docs.length === 0) {
-      return done(err); //Possibly if it will not make on its own, create new task
+      console.log(err); //Possibly if it will not make on its own, create new task
     } else {
       console.log(docs);
     }
