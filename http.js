@@ -117,7 +117,7 @@ app.get('/incorrect', function(req, res) {
 
 var Task = mongoose.model('step', mongoose.Schema({
   username: { type: String, required: true }, //Required but not unique becasue it should already exits
-  tasks: { task:'string', description:'string', step:'array' }
+  tasks: { task: { type: String }, description:'string', step: {checked: 'string', step: 'string'}}
 }), 'accounts');
 
 app.get('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
@@ -136,37 +136,36 @@ app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, 
   console.log(req.user);
   console.log(req.body.step); //break req.body.step into array before pushing
   console.log(typeof req.body.step);
-  var step = []; //needs to not add each word in array....
+  var step = {}; //needs to not add each word in array....
   if (typeof req.body.step === 'object') {
     for (var i = 0;i < req.body.step.length;i++) {
       console.log(req.body.step[i]);
-      step.push({'step': req.body.step[i],'checked': false});
+      step[i] = {'step': req.body.step[i],'checked': false};
       //step.step = ;
       //step.checked = false;
       console.log(step);
     }
   } else {
-    step.push({'step': req.body.step,'checked': false});
+    step[0] = {'step': req.body.step,'checked': false};
   }
   Task.findOneAndUpdate(
     {'username': req.user},
     {$push: {tasks: {'task': req.body.taskname, 'step': {'step': step}, 'description': req.body.taskdescription}}},
     function (err, docs) {
       if (docs.length === 0) {
-      console.log(err); //Possibly if it will not make on its own, create new task
-    } else {
-      console.log(docs);
-    }
-  });
-  res.redirect('/home');
+        console.log(err); //Possibly if it will not make on its own, create new task
+      } else {
+        console.log(docs);
+      }
+    });
+    res.redirect('/home');
 });
 
 app.post('/api/step', bodyParser.json(), function(req, res) {
 
-
   Task.findOneAndUpdate(
     {username: req.user}, {tasks: [{task: req.body[0]}]},
-    {$push: {'step': {'step': req.body[1],'checked': false}}},
+    {$push: {'step': req.body[1],'checked': false}},
     function (err, docs) {
       if (docs.length === 0) {
       return done(err); //Possibly if it will not make on its own, create new task
@@ -175,13 +174,14 @@ app.post('/api/step', bodyParser.json(), function(req, res) {
     }
   });
 
-
+//Resending new task data with update to frontend
   Task.find({ 'username': req.user }, function (err, docs) { //req.user
     if (docs.length === 0) {
       console.log(err);
     }
     else {
       console.log('Resending data!');
+      console.log(docs);
       res.json(docs[0].tasks); //is sending, front end will need
     }
   });

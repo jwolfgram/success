@@ -12,12 +12,12 @@
       </svg>
     <md-content layout="column" flex>
       <md-tabs id="tabs" layout="column" flex>
-        <md-tab layout="column" label="Home" flex-xs="80" flex-sm="40" flex-md="30" flex-lg="30" flex-xl="20"  flex>
-          <md-tab-content md-padding layout="column" layout-wrap>
+        <md-tab layout="column" label="Home">
+          <md-tab-content layout-align="center" md-padding layout="row" layout-wrap>
           <!--Card for ng-repeat-->
 
 
-            <md-card ng-cloak ng-repeat="text in card.card" class="card">
+            <md-card ng-cloak flex-xs="100" flex-sm="45" flex-md="30" flex-lg="20" flex-xl="20" ng-repeat="text in card.card" class="card">
               <md-card-title>
                 <md-card-title-text>
                   <span class="md-headline">{{text.task}}</span>
@@ -31,19 +31,19 @@
                       {{step.step}}
                     </md-checkbox>
                   </div>
-                  <md-button class="md-icon-button" aria-label="Add Step" ng-click="card.addNewcardStep(text.task)">
+                  <md-button flex-gt-xs="10" class="md-icon-button" aria-label="Add Step" ng-click="card.addNewcardStep(text.task)">
                     <md-icon class="button-shadow" md-svg-src="/images/board/add.svg"></md-icon>
                     <md-tooltip>
                       Add Step
                     </md-tooltip>
                   </md-button>
-                  <md-input-container>
+                  <md-input-container flex-gt-xs="75">
                     <label>Add new step</label>
                     <input type="text" ng-model="card.addStep" ng-keyup="$event.keyCode == 13 ? card.addNewcardStep(text.task) : null" required>
                   </md-input-container>
                 </div>
                 <!-- We put checklist adding ehre with class layout-coulumn?? -->
-                <md-card-actions layout="column" layout-align="end end" flex>
+                <md-card-actions flex-gt-xs="10" layout="column" layout-align="end end" flex>
                   <button class="md-icon-button md-button" md-ink-ripple type="button" aria-label="Edit">
                     <md-icon md-svg-icon="/images/board/popout.svg" class="ng-scope ng-isolate-scope" aria-label="Edit Task">
                       <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet">
