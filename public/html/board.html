@@ -27,11 +27,11 @@
               <md-card-content layout="row" layout-align="space-around start" class="layout-align-space-between-stretch">
                 <div>
                   <div ng-repeat="step in text.step.step">
-                    <md-checkbox checked={{step.checked}}>
+                    <md-checkbox ng-cloak aria-label="checkbox" checked={{step.checked}}>
                       {{step.step}}
                     </md-checkbox>
                   </div>
-                  <md-button class="md-icon-button" aria-label="Add Step" ng-click="card.addNewcardStep()">
+                  <md-button class="md-icon-button" aria-label="Add Step" ng-click="card.addNewcardStep(text.task)">
                     <md-icon class="button-shadow" md-svg-src="/images/board/add.svg"></md-icon>
                     <md-tooltip>
                       Add Step
@@ -39,7 +39,7 @@
                   </md-button>
                   <md-input-container>
                     <label>Add new step</label>
-                    <input type="text" ng-model="card.addStep" ng-keyup="$event.keyCode == 13 ? card.addNewcardStep() : null" required>
+                    <input type="text" ng-model="card.addStep" ng-keyup="$event.keyCode == 13 ? card.addNewcardStep(text.task) : null" required>
                   </md-input-container>
                 </div>
                 <!-- We put checklist adding ehre with class layout-coulumn?? -->
@@ -71,7 +71,7 @@
             </md-card>
 
 
-          <md-button id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.newTask($event)">
+          <md-button ng-cloak id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.newTask($event)">
             <md-icon md-svg-src="/images/board/task.svg" style="display: inline;"></md-icon>
             <md-tooltip>
               New Task

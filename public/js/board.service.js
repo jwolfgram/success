@@ -14,11 +14,8 @@ app.factory('taskService', ['$http',function($http) {
 
 app.factory('stepsService', ['$http',function($http) {
   return {
-    getSteps : function() {
-      return $http.get('/api/todos');
-    },
-    sendStep : function(todoData) {
-      return $http.post('/api/todos', todoData);
+    sendStep : function(task, newStep) {
+      return $http.post('/api/step', [task, newStep]);
     },
     deleteStep : function(id) {
       return $http.delete('/api/todos/' + id);
@@ -28,17 +25,16 @@ app.factory('stepsService', ['$http',function($http) {
 
 app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, taskService, stepsService) {
   vm = this;
-  vm.addNewcardStep = function() {
-    vm.card.step[0].step.step.push = {checked: false, step: String(vm.card.step.step.length+1)}; //in a sub array... hhmm
-    console.log(vm.addStep); //Send vm.addStep to $http nodejs
-    vm.card.step.push(vm.addStep);
+  vm.addNewcardStep = function(task) {
+    stepsService.sendStep(task,vm.addStep).then(function(newData) {
+      vm.card = newData.data;
+    });
     vm.addStep = null;
   };
 
   taskService.getTasks().then(function(resp) {
     console.log(resp.data); //Fix this
     vm.card = resp.data;
-    console.log(vm.card[0].step.step);
   });
 
 

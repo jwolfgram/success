@@ -117,11 +117,11 @@ app.get('/incorrect', function(req, res) {
 
 var Task = mongoose.model('step', mongoose.Schema({
   username: { type: String, required: true }, //Required but not unique becasue it should already exits
-  tasks: { 'task':'string','description':'string', 'step':'array' }
+  tasks: { task:'string', description:'string', step:'array' }
 }), 'accounts');
 
 app.get('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
-  Task.find({ 'username': 'jwolfgram' }, function (err, docs) { //req.user
+  Task.find({ 'username': req.user }, function (err, docs) { //req.user
     if (docs.length === 0) {
       console.log(err);
     }
@@ -135,13 +135,17 @@ app.get('/api/task', function(req, res) { //This will send the users task along 
 app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, res) { //This will send the users task along with the steps for ng-repete to display
   console.log(req.user);
   console.log(req.body); //break req.body.step into array before pushing
-  var step = [];
-  for (var i = 0;i < req.body.step.length;i++) {
-    console.log(req.body.step[i]);
-    step.push({'step': req.body.step[i],'checked': true});
-    //step.step = ;
-    //step.checked = false;
-    console.log(step);
+  var step = []; //needs to not add each word in array....
+  if (req.body.step === Array) {
+    for (var i = 0;i < req.body.step.length;i++) {
+      console.log(req.body.step[i]);
+      step.push({'step': req.body.step[i],'checked': false});
+      //step.step = ;
+      //step.checked = false;
+      console.log(step);
+    }
+  } else {
+    step.push({'step': req.body.step,'checked': false});
   }
   Task.findOneAndUpdate(
     {'username': req.user},
@@ -153,12 +157,33 @@ app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, 
       console.log(docs);
     }
   });
-
   res.redirect('/home');
 });
 
-app.post('/api/step', function(req, res) {
-//This will send the users task along with the steps for ng-repete to display
+app.post('/api/step', bodyParser.json(), function(req, res) {
+
+
+  Task.findOneAndUpdate(
+    {username: req.user}, {tasks: [{task: req.body[0]}]},
+    {$push: {'step': {'step': req.body[1],'checked': false}}},
+    function (err, docs) {
+      if (docs.length === 0) {
+      return done(err); //Possibly if it will not make on its own, create new task
+    } else {
+      console.log(docs);
+    }
+  });
+
+
+  Task.find({ 'username': req.user }, function (err, docs) { //req.user
+    if (docs.length === 0) {
+      console.log(err);
+    }
+    else {
+      console.log('Resending data!');
+      res.json(docs[0].tasks); //is sending, front end will need
+    }
+  });
 });
 
 app.use('/angular/template/', express.static('public/angularTemplates'));
