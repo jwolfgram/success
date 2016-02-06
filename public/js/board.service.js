@@ -3,10 +3,10 @@ var app = angular.module('app', ['ngMaterial', 'ngMessages']);
 app.factory('taskService', ['$http',function($http) {
   return {
     getTasks : function() {
-      return $http.get('/api/task');
+      return $http.get('/api/task/');
     },
-    deleteTask : function(id) {
-      return $http.delete('/api/todos/' + id);
+    deleteTask : function(task) {
+      return $http.post('/api/task/delete', [task]);
     }
   };
 }]);
@@ -16,9 +16,6 @@ app.factory('stepsService', ['$http',function($http) {
   return {
     sendStep : function(task, newStep) {
       return $http.post('/api/step', [task, newStep]);
-    },
-    deleteStep : function(id) {
-      return $http.delete('/api/todos/' + id);
     }
   };
 }]);
@@ -32,6 +29,13 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
     vm.addStep = null;
   };
 
+  vm.deleteTask = function(task) {
+    console.log('Task to delete: ' + task);
+    taskService.deleteTask(task).then(function(newData) {
+      vm.card = newData.data;
+    });
+  };
+
   taskService.getTasks().then(function(resp) {
     console.log(resp.data); //Fix this
     vm.card = resp.data;
@@ -40,7 +44,7 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
 
   vm.newTask = function showDialog($event) {
     var parentEl = angular.element(document.body);
-      $mdDialog.show({
+    $mdDialog.show({
       parent: parentEl,
       targetEvent: $event,
       templateUrl: '/angular/template/newTask.html',

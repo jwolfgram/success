@@ -6,15 +6,12 @@ mongoose = require('mongoose'),
 passportLocal = require('passport-local').Strategy,
 passport = require('passport'),
 session = require('express-session'),
-flash = require('connect-flash');
-
-mongoose.connect('ds051625.mongolab.com:51625/success', {
-  user: 'digibitstech',
-  pass: 'applesandpeaches4life'});
+flash = require('connect-flash'),
+db = require('./dbs.js');
 
 passport.use(new passportLocal({usernameField: 'username', passwordField: 'password'},
   function(username, password, done) {
-    User.find({ 'username': username }, function (err, docs) {
+    db.User.find({ 'username': username }, function (err, docs) {
       if (docs.length === 0) {
         return done(err);
       }
@@ -42,7 +39,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(user, done) {
-  User.find({ 'username': user }, function (err, docs) {
+  db.User.find({ 'username': user }, function (err, docs) {
     if (docs.length === 0) {
       return done(err);
     }
@@ -55,16 +52,8 @@ passport.deserializeUser(function(user, done) {
 
 app.post('/', bodyParser.urlencoded({ extended: false }), passport.authenticate('local',{ successRedirect: '/home', failureRedirect: '/incorrect'}));
 
-var User = mongoose.model('user', mongoose.Schema({
-  firstname: { type: String, required: true },
-  lastname: { type: String, required: true },
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true, validate: /^(?=.*\d).{6,20}$/ }
-}), 'accounts');
-
-
 app.post('/signup', bodyParser.urlencoded({ extended: false }), function(req, res) {
-  new User ({
+  new db.User ({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     username: req.body.username,
@@ -115,18 +104,13 @@ app.get('/incorrect', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/html/incorrectLogin.html'));
 });
 
-var Task = mongoose.model('step', mongoose.Schema({
-  username: { type: String, required: true }, //Required but not unique becasue it should already exits
-  tasks: { task: { type: String }, description:'string', step: {checked: 'string', step: 'string'}}
-}), 'accounts');
-
 app.get('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
-  Task.find({ 'username': req.user }, function (err, docs) { //req.user
+  db.Task.find({ 'username': req.user }, function (err, docs) { //req.user
     if (docs.length === 0) {
       console.log(err);
     }
     else {
-      console.log('got else!');
+      console.log('Send data to frontend!');
       res.json(docs[0].tasks); //is sending, front end will need
     }
   });
@@ -134,23 +118,20 @@ app.get('/api/task', function(req, res) { //This will send the users task along 
 
 app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, res) { //This will send the users task along with the steps for ng-repete to display
   console.log(req.user);
-  console.log(req.body.step); //break req.body.step into array before pushing
-  console.log(typeof req.body.step);
-  var step = {}; //needs to not add each word in array....
+  console.log(req.body); //break req.body.step into array before pushing
+  var step = []; //needs to not add each word in array....
   if (typeof req.body.step === 'object') {
     for (var i = 0;i < req.body.step.length;i++) {
-      console.log(req.body.step[i]);
-      step[i] = {'step': req.body.step[i],'checked': false};
+      step.push({'step': req.body.step[i],'checked': false});
       //step.step = ;
       //step.checked = false;
-      console.log(step);
     }
   } else {
-    step[0] = {'step': req.body.step,'checked': false};
+    step.push({'step': req.body.step,'checked': false});
   }
-  Task.findOneAndUpdate(
+  db.Task.findOneAndUpdate(
     {'username': req.user},
-    {$push: {tasks: {'task': req.body.taskname, 'step': {'step': step}, 'description': req.body.taskdescription}}},
+    {$push: {tasks: {'task': req.body.taskname, 'steps': step, 'description': req.body.taskdescription}}},
     function (err, docs) {
       if (docs.length === 0) {
         console.log(err); //Possibly if it will not make on its own, create new task
@@ -158,24 +139,16 @@ app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, 
         console.log(docs);
       }
     });
-    res.redirect('/home');
+  res.redirect('/home');
 });
 
-app.post('/api/step', bodyParser.json(), function(req, res) {
-
-  Task.findOneAndUpdate(
-    {username: req.user}, {tasks: [{task: req.body[0]}]},
-    {$push: {'step': req.body[1],'checked': false}},
-    function (err, docs) {
-      if (docs.length === 0) {
-      return done(err); //Possibly if it will not make on its own, create new task
-    } else {
-      console.log(docs);
-    }
+app.post('/api/task/delete', bodyParser.json(), function(req, res) { //This will send the users task along with the steps for ng-repete to display
+  console.log(req.body[0]);
+  db.Task.update({username: req.user}, {$pull: {tasks: {task: req.body[0]}}}, function (err, docs) {
+    console.log(err);
   });
 
-//Resending new task data with update to frontend
-  Task.find({ 'username': req.user }, function (err, docs) { //req.user
+  db.Task.find({ 'username': req.user }, function (err, docs) { //req.user
     if (docs.length === 0) {
       console.log(err);
     }
@@ -185,6 +158,27 @@ app.post('/api/step', bodyParser.json(), function(req, res) {
       res.json(docs[0].tasks); //is sending, front end will need
     }
   });
+});
+
+app.post('/api/step', bodyParser.json(), function(req, res) {
+  db.Task.update({username: req.user}, {$push: {tasks: {task: req.body[0], steps: req.body[1]}}}, function (err, docs) {
+    console.log(err);
+  });
+//Resending new task data with update to frontend
+  db.Task.find({ 'username': req.user }, function (err, docs) { //req.user
+    if (docs.length === 0) {
+      console.log(err);
+    }
+    else {
+      console.log('Resending data!');
+      console.log(docs);
+      res.json(docs[0].tasks); //is sending, front end will need
+    }
+  });
+});
+
+db.Task.find({username: 'jwolfgram'}, function (err, docs) {
+  console.log(docs); //is sending, front end will need
 });
 
 app.use('/angular/template/', express.static('public/angularTemplates'));

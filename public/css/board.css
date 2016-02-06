@@ -21,6 +21,9 @@
   bottom: 0;
 }
 
+#card-layout {
+ margin-bottom: 100px;
+}
 .button-shadow {
   box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
   border-radius: 50%;
