@@ -11,12 +11,12 @@ db = require('./dbs.js');
 
 passport.use(new passportLocal({usernameField: 'username', passwordField: 'password'},
   function(username, password, done) {
-    db.User.find({ 'username': username }, function (err, docs) {
+    db.Account.find({ 'username': username }, function (err, docs) {
       if (docs.length === 0) {
         return done(err);
       }
       else {
-        if (docs[0].password === password) { //No loop needed, we just find the one user and check the password when Mongoose returns.
+        if (docs[0].password === password) {
           console.log('Verified password matches user');
           return done(null, username);
         }
@@ -39,12 +39,11 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(user, done) {
-  db.User.find({ 'username': user }, function (err, docs) {
+  db.Account.find({ 'username': user }, function (err, docs) {
     if (docs.length === 0) {
       return done(err);
     }
     else {
-      //console.log(docs[0].username + ' has been deserialized');
       return done(err, docs[0].username);
     }
   });
@@ -53,7 +52,7 @@ passport.deserializeUser(function(user, done) {
 app.post('/', bodyParser.urlencoded({ extended: false }), passport.authenticate('local',{ successRedirect: '/home', failureRedirect: '/incorrect'}));
 
 app.post('/signup', bodyParser.urlencoded({ extended: false }), function(req, res) {
-  new db.User ({
+  new db.Account ({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     username: req.body.username,
@@ -61,6 +60,7 @@ app.post('/signup', bodyParser.urlencoded({ extended: false }), function(req, re
   }).save(function(err) {
     if (err) {
       console.log(err);
+      //Incorrect username redirect
     }else {
       console.log('User saved successfully!');
       res.redirect('/');
@@ -105,7 +105,7 @@ app.get('/incorrect', function(req, res) {
 });
 
 app.get('/api/task', function(req, res) { //This will send the users task along with the steps for ng-repete to display
-  db.Task.find({ 'username': req.user }, function (err, docs) { //req.user
+  db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
     if (docs.length === 0) {
       console.log(err);
     }
@@ -129,7 +129,7 @@ app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, 
   } else {
     step.push({'step': req.body.step,'checked': false});
   }
-  db.Task.findOneAndUpdate(
+  db.Account.findOneAndUpdate(
     {'username': req.user},
     {$push: {tasks: {'task': req.body.taskname, 'steps': step, 'description': req.body.taskdescription}}},
     function (err, docs) {
@@ -144,28 +144,45 @@ app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, 
 
 app.post('/api/task/delete', bodyParser.json(), function(req, res) { //This will send the users task along with the steps for ng-repete to display
   console.log(req.body[0]);
-  db.Task.update({username: req.user}, {$pull: {tasks: {task: req.body[0]}}}, function (err, docs) {
-    console.log(err);
+  var deleteTask = new Promise (function(resolve, reject) {
+    db.Account.update({username: req.user}, {$pull: {tasks: {task: req.body[0]}}}, function (err, docs) {
+      console.log('Deleted Task');
+      if (err) {
+        console.log(err);
+        reject('Failed');
+      }
+      else {
+        resolve("Success!");
+      }
+    });
   });
 
-  db.Task.find({ 'username': req.user }, function (err, docs) { //req.user
-    if (docs.length === 0) {
-      console.log(err);
-    }
-    else {
-      console.log('Resending data!');
-      console.log(docs);
-      res.json(docs[0].tasks); //is sending, front end will need
-    }
-  });
+  deleteTask.then(
+    function(value) {
+      if (value === 'Success!') {
+        db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
+          if (docs.length === 0) {
+            console.log(err);
+          }
+          else {
+            console.log('Resending data!');
+            console.log(docs);
+            res.json(docs[0].tasks); //is sending, front end will need
+          }
+        });
+      }
+      else {
+        console(value);
+      }
+    });
 });
 
 app.post('/api/step', bodyParser.json(), function(req, res) {
-  db.Task.update({username: req.user}, {$push: {tasks: {task: req.body[0], steps: req.body[1]}}}, function (err, docs) {
+  db.Account.update({username: req.user}, {$push: {tasks: {task: req.body[0], steps: req.body[1]}}}, function (err, docs) {
     console.log(err);
   });
 //Resending new task data with update to frontend
-  db.Task.find({ 'username': req.user }, function (err, docs) { //req.user
+  db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
     if (docs.length === 0) {
       console.log(err);
     }
@@ -175,10 +192,6 @@ app.post('/api/step', bodyParser.json(), function(req, res) {
       res.json(docs[0].tasks); //is sending, front end will need
     }
   });
-});
-
-db.Task.find({username: 'jwolfgram'}, function (err, docs) {
-  console.log(docs); //is sending, front end will need
 });
 
 app.use('/angular/template/', express.static('public/angularTemplates'));

@@ -14,7 +14,7 @@
           <div layout="row">
             <md-input-container>
               <label>Task Name:</label>
-              <input type="text" name="taskname">
+              <input md-autofocus type="text" name="taskname">
             </md-input-container>
             <md-input-container>
               <label>Description:</label>
@@ -26,7 +26,7 @@
               <div data-ng-repeat="step in task.steps">
                 <md-input-container layout-align="start start">
                   <label>{{step.label}}</label>
-                  <input type="text" name="step" ng-keyup="$event.keyCode == 13 ? task.addNewStep() : null">
+                  <input set-focus="$last" type="text" name="step" ng-keyup="$event.keyCode == 13 ? task.addNewStep() : null">
                 </md-input-container>
               </div>
             </div>

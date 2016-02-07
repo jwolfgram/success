@@ -1,23 +1,18 @@
 var mongoose = require('mongoose');
 
-
-
 mongoose.connect('ds051625.mongolab.com:51625/success', {
   user: 'digibitstech',
   pass: 'applesandpeaches4life'});
 
-var User = mongoose.model('user', mongoose.Schema({
+var AccountSchema = new mongoose.Schema({
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true, validate: /^(?=.*\d).{6,20}$/ }
-}),'accounts');
-
-var Task = mongoose.model('tasks', mongoose.Schema({
   username: {
     type: String,
-    required: true
-  }, //Required but not unique becasue it should already exits
+    required: true,
+    unique: true
+  },
+  password: { type: String, required: true, validate: /^(?=.*\d).{6,20}$/ },
   tasks: [{
     task: {
       type: String
@@ -27,10 +22,37 @@ var Task = mongoose.model('tasks', mongoose.Schema({
     },
     steps: {
       type: Array
-    }
+    },
+    _id: false
   }]
-}),'accounts');
+});
+
+var Account = mongoose.model('account', AccountSchema);
+
+var TaskSchema = new mongoose.Schema({
+  firstname: { type: String, required: true },
+  lastname: { type: String, required: true },
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: { type: String, required: true, validate: /^(?=.*\d).{6,20}$/ },
+  tasks: [{
+    task: {
+      type: String
+    },
+    description: {
+      type: String
+    },
+    steps: {
+      type: [{step: {type: String, required: true}}, {checked: {type: Boolean, default: false}}]
+    },
+    _id: false
+  }]
+});
+
+//var Task = mongoose.model('account', TaskSchema);
 
 
-exports.Task = Task;
-exports.User = User;
+exports.Account = Account;
