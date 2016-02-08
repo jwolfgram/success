@@ -1,5 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
 <md-dialog aria-label="New Task" ng-cloak ng-app="app" ng-controller="newTaskController as task">
-  <form id="task-form" action="/api/task" method="post">
+  <form id="task-form" method="post">
     <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Create Task</h2>
@@ -39,10 +44,10 @@
       <md-button ng-click="closeDialog()">
         Cancel
       </md-button>
-      <button class="md-button md-ink-ripple" id="save-task" style="margin-right:20px;">
+      <md-button ng-Click="task.submitTask()" style="margin-right:20px;">
         Save
-      </button>
+      </md-button>
     </md-dialog-actions>
   </form>
 </md-dialog>
-<script src="/js/board.js"></script>
+</body>

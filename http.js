@@ -178,9 +178,21 @@ app.post('/api/task/delete', bodyParser.json(), function(req, res) { //This will
 });
 
 app.post('/api/step', bodyParser.json(), function(req, res) {
+  //Define child schema to work with... mayby add task then or try the hard way whichever
   db.Account.update({username: req.user}, {$push: {tasks: {task: req.body[0], steps: req.body[1]}}}, function (err, docs) {
     console.log(err);
   });
+//NULLLLLLL
+  db.Account.update({username: req.user}, {$pull: {tasks: {task: req.body[0]}}}, function (err, docs) {
+      console.log('Deleted Task');
+      if (err) {
+        console.log(err);
+        reject('Failed');
+      }
+      else {
+        resolve("Success!");
+      }
+    });
 //Resending new task data with update to frontend
   db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
     if (docs.length === 0) {

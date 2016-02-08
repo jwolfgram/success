@@ -37,7 +37,6 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
   };
 
   taskService.getTasks().then(function(resp) {
-    console.log(resp.data); //Fix this
     vm.card = resp.data;
   });
 
@@ -55,24 +54,47 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
 
   function DialogController($scope, $mdDialog) {
     $scope.closeDialog = function() {
-      $mdDialog.hide();
-    };
-    $scope.submitTask = function() {
+      console.log('Close Dialoge');
       $mdDialog.hide();
     };
   }
-
 }]);
 
 app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', function($scope, taskService, stepsService) {
   vm = this;
   vm.steps = [];
   vm.addNewStep = function() {
-    vm.newTask = String(vm.steps.length+1);
-    console.log(vm.newTask);
-    var newStep = {};
-    newStep.id = 'step' + vm.newTask;
-    newStep.label = 'Step ' + vm.newTask;
-    vm.steps.push(newStep);
-  };
-}]);
+    var newTask = new Promise (function(resolve, reject) {
+      vm.newTask = String(vm.steps.length + 1);
+      var newStep = {};
+      newStep.id = 'step' + vm.newTask;
+      newStep.label = 'Step ' + vm.newTask;
+      vm.steps.push(newStep);
+      resolve("Success!");
+    });
+
+    newTask.then(
+      function(value) {
+        if (value === 'Success!') {
+          var input = document.getElementById('task-form').getElementsByTagName("input");
+          input[input.length - 1].focus();
+        }
+        else {
+          console(value);
+        }
+      });
+    };
+  vm.submitTask = function() {
+    console.log('Submitting task');
+    var form = document.getElementById("task-form");
+    var promise = new Promise (function(resolve, reject) {
+      form.setAttribute("action", "/api/task");
+      resolve("Success!");
+    });
+    promise.then(function(value) {
+      form.submit();
+      $mdDialog.hide();
+    });
+    };
+  }
+]);

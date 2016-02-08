@@ -43,6 +43,7 @@
                   </div>
                   <!-- We put checklist adding ehre with class layout-coulumn?? -->
                   <md-card-actions flex-gt-xs="10" layout="column" layout-align="end end">
+                  <!--
                     <button class="md-icon-button md-button" md-ink-ripple type="button" aria-label="Edit">
                       <md-icon md-svg-icon="/images/board/popout.svg" class="ng-scope ng-isolate-scope" aria-label="Edit Task">
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet">
@@ -54,8 +55,9 @@
                         Edit Task
                       </md-tooltip>
                     </button>
+                  -->
                     <button ng-click="card.deleteTask(text.task)" class="md-icon-button md-button" md-ink-ripple  type="button" aria-label="Close">
-                      <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Close task">\
+                      <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Close task">
                         <svg version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet"><g><g>
                           <path fill="#7d7d7d" d="M21,11l-7-7v4C7,9,4,14,3,19c2.5-3.5,6-5.1,11-5.1V18L21,11z"></path>
                           <rect fill="none" width="24" height="24"></rect></g></g>
@@ -88,7 +90,6 @@
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.4/angular-material.min.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script src="/js/board.service.js"></script>
 </body>
 </html>
