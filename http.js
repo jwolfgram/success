@@ -116,30 +116,33 @@ app.get('/api/task', function(req, res) { //This will send the users task along 
   });
 });
 
-app.post('/api/task', bodyParser.urlencoded({ extended: false }), function(req, res) { //This will send the users task along with the steps for ng-repete to display
-  console.log(req.user);
+app.post('/api/task', bodyParser.json(), function(req, res) { //This will send the users task along with the steps for ng-repete to display
   console.log(req.body); //break req.body.step into array before pushing
-  var step = []; //needs to not add each word in array....
-  if (typeof req.body.step === 'object') {
-    for (var i = 0;i < req.body.step.length;i++) {
-      step.push({'step': req.body.step[i],'checked': false});
-      //step.step = ;
-      //step.checked = false;
-    }
-  } else {
-    step.push({'step': req.body.step,'checked': false});
-  }
-  db.Account.findOneAndUpdate(
+  var addTask = new Promise (function(resolve, reject) {
+    db.Account.findOneAndUpdate(
     {'username': req.user},
-    {$push: {tasks: {'task': req.body.taskname, 'steps': step, 'description': req.body.taskdescription}}},
+    {$push: {tasks: {'task': req.body[0].task, 'steps': req.body[0].steps, 'description': req.body[0].description}}},
     function (err, docs) {
-      if (docs.length === 0) {
+      if (err) {
         console.log(err); //Possibly if it will not make on its own, create new task
       } else {
-        console.log(docs);
+        resolve("Success!");
       }
     });
-  res.redirect('/home');
+  });
+  addTask.then(
+    function(value) {
+      db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
+        if (docs.length === 0) {
+          console.log(err);
+        }
+        else {
+          console.log('Resending data!');
+          console.log(docs);
+          res.json(docs[0].tasks); //is sending, front end will need
+        }
+      });
+  });
 });
 
 app.post('/api/task/delete', bodyParser.json(), function(req, res) { //This will send the users task along with the steps for ng-repete to display
@@ -212,4 +215,4 @@ app.use('/style',express.static('public/css')); //Route to /style for css
 app.use('/js',express.static('public/js')); //Route to /js for javascript
 app.use('/images',express.static('public/images')); //Route to /images for images
 
-app.listen(process.env.PORT || 8080);
+app.listen(process.env.PORT || 8081);

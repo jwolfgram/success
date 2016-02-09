@@ -16,7 +16,7 @@
           <md-tab-content ng-cloak>
           <!--Card for ng-repeat-->
             <div id="card-layout" layout-align="center" md-padding layout="row" layout-wrap>
-              <md-card flex-xs="100" flex-sm="45" flex-md="30" flex-lg="20" flex-xl="20" ng-repeat="text in card.card" class="card">
+              <md-card flex-xs="100" flex-sm="45" flex-md="30" flex-lg="20" flex-xl="20" ng-repeat="text in card.cards" class="card">
                 <md-card-title>
                   <md-card-title-text>
                     <span class="md-headline">{{text.task}}</span>
@@ -58,15 +58,15 @@
                       </md-tooltip>
                     </button>
                   -->
-                    <button ng-click="card.deleteTask(text.task)" class="md-icon-button md-button" md-ink-ripple  type="button" aria-label="Close">
-                      <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Close task">
+                    <button ng-click="card.deleteTask(text.task)" class="md-icon-button md-button" md-ink-ripple  type="button" aria-label="Delete">
+                      <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Delete task">
                         <svg version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet"><g><g>
                           <path fill="#7d7d7d" d="M21,11l-7-7v4C7,9,4,14,3,19c2.5-3.5,6-5.1,11-5.1V18L21,11z"></path>
                           <rect fill="none" width="24" height="24"></rect></g></g>
                         </svg>
                       </md-icon>
                       <md-tooltip>
-                        Close Task
+                        Delete Task
                       </md-tooltip>
                     </button>
                   </md-card-actions>
@@ -79,6 +79,8 @@
               New Task
             </md-tooltip>
           </md-button>
+          <div id="toast">
+          </div>
         </md-tab-content>
       </md-tab>
       <md-tab label="Settings">

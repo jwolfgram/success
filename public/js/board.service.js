@@ -1,12 +1,16 @@
 var app = angular.module('app', ['ngMaterial', 'ngMessages']);
 
 app.factory('taskService', ['$http',function($http) {
+  this.test = "Testing works";
   return {
     getTasks : function() {
       return $http.get('/api/task/');
     },
     deleteTask : function(task) {
       return $http.post('/api/task/delete', [task]);
+    },
+    sendTask : function(task) {
+      return $http.post('/api/task/', [task]);
     }
   };
 }]);
@@ -20,26 +24,41 @@ app.factory('stepsService', ['$http',function($http) {
   };
 }]);
 
-app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, taskService, stepsService) {
+app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, $mdToast, taskService, stepsService) {
   vm = this;
+  console.log(taskService.getTasks());
+  taskService.getTasks().then(function(newData) {
+    vm.cards = newData.data;
+    if (vm.cards.length === 0) {
+      $mdDialog.show(
+      $mdDialog.alert()
+        .clickOutsideToClose(true)
+        .title('No Tasks!')
+        .textContent('It Looks Like You Have No Tasks, Go Ahead And Make One!')
+        .ariaLabel('No Tasks, make a new one!')
+        .ok('Ok Cool!')
+      );
+    }
+    else {
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent('You have ' + vm.cards.length + ' tasks!')
+          .position('bottom right')
+          .parent(document.getElementById('toast'))
+          .hideDelay(3000)
+      );
+    }
+  });
+
   vm.addNewcardStep = function(task) {
-    stepsService.sendStep(task,vm.addStep).then(function(newData) {
-      vm.card = newData.data;
-    });
+    stepsService.sendStep(task,vm.addStep);
     vm.addStep = null;
   };
 
   vm.deleteTask = function(task) {
     console.log('Task to delete: ' + task);
-    taskService.deleteTask(task).then(function(newData) {
-      vm.card = newData.data;
-    });
+    taskService.deleteTask(task);
   };
-
-  taskService.getTasks().then(function(resp) {
-    vm.card = resp.data;
-  });
-
 
   vm.newTask = function showDialog($event) {
     var parentEl = angular.element(document.body);
@@ -60,7 +79,7 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', 'taskServic
   }
 }]);
 
-app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', function($scope, taskService, stepsService) {
+app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', '$mdDialog', function($scope, taskService, stepsService, $mdDialog) {
   vm = this;
   vm.steps = [];
   vm.addNewStep = function() {
@@ -70,13 +89,13 @@ app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', fu
       newStep.id = 'step' + vm.newTask;
       newStep.label = 'Step ' + vm.newTask;
       vm.steps.push(newStep);
-      resolve("Success!");
+      resolve('Success!');
     });
 
     newTask.then(
       function(value) {
         if (value === 'Success!') {
-          var input = document.getElementById('task-form').getElementsByTagName("input");
+          var input = document.getElementById('task-form').getElementsByTagName('input');
           input[input.length - 1].focus();
         }
         else {
@@ -86,13 +105,27 @@ app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', fu
     };
   vm.submitTask = function() {
     console.log('Submitting task');
-    var form = document.getElementById("task-form");
+    var formTitle = document.getElementById('task-name').value;
+    var formDescription = document.getElementById('task-description').value;
+    var formStep = document.getElementsByClassName('send-step');
+    var sendSteps = [];
+    console.log(vm.cards);
+
     var promise = new Promise (function(resolve, reject) {
-      form.setAttribute("action", "/api/task");
-      resolve("Success!");
+      for (var i = formStep.length; i--;) {
+        if(formStep[i].value.length > 0) {
+          sendSteps.unshift({'step': formStep[i].value, 'checked': false});
+        }
+      }
+      resolve('Success!');
     });
     promise.then(function(value) {
-      form.submit();
+      var sendData = {};
+      sendData.task = formTitle;
+      sendData.description = formDescription;
+      sendData.steps = sendSteps;
+      console.log(sendData);
+      taskService.sendTask(sendData);
       $mdDialog.hide();
     });
     };

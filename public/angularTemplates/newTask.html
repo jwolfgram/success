@@ -10,7 +10,7 @@
         <h2>Create Task</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+          <md-icon aria-label="Close dialog"></md-icon>
         </md-button>
       </div>
     </md-toolbar>
@@ -19,11 +19,11 @@
           <div layout="row">
             <md-input-container>
               <label>Task Name:</label>
-              <input md-autofocus type="text" name="taskname">
+              <input autocomplete="off" md-autofocus type="text" id="task-name">
             </md-input-container>
             <md-input-container>
               <label>Description:</label>
-              <textarea type="text" name="taskdescription"></textarea>
+              <textarea autocomplete="off" type="text" id="task-description"></textarea>
             </md-input-container>
           </div>
           <div layout="row" layout-align="start end">
@@ -31,7 +31,7 @@
               <div data-ng-repeat="step in task.steps">
                 <md-input-container layout-align="start start">
                   <label>{{step.label}}</label>
-                  <input set-focus="$last" type="text" name="step" ng-keyup="$event.keyCode == 13 ? task.addNewStep() : null">
+                  <input  autocomplete="off" class="send-step" type="text" name="step" ng-keyup="$event.keyCode == 13 ? task.addNewStep() : null">
                 </md-input-container>
               </div>
             </div>

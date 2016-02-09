@@ -15,6 +15,14 @@
   left: 25px;
 }
 
+#toast {
+  height: 50px;
+  width: 20%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
 .card-btn-bottom {
   margin-top: 25%;
   position: absolute;
