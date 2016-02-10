@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="/style/board.css">
 </head>
 <body ng-app="app">
-  <div ng-cloak ng-controller="cardController as card" layout="column" layout-fill>
+  <div ng-cloak ng-controller="cardController as card" layout="column" layout-fill ng-init="card.initCheck()">
     <!-- Loading spinnger CSS, needs work if there is enough time to view it -->
       <svg class="spinner" ng-cloak="" viewBox="0 0 50 50">
         <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
@@ -16,7 +16,7 @@
           <md-tab-content ng-cloak>
           <!--Card for ng-repeat-->
             <div id="card-layout" layout-align="center" md-padding layout="row" layout-wrap>
-              <md-card flex-xs="100" flex-sm="45" flex-md="30" flex-lg="20" flex-xl="20" ng-repeat="text in card.cards" class="card">
+              <md-card flex-xs="100" flex-sm="45" flex-md="30" flex-lg="20" flex-xl="20" ng-repeat="text in card.tasks track by $index" class="card">
                 <md-card-title>
                   <md-card-title-text>
                     <span class="md-headline">{{text.task}}</span>

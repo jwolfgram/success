@@ -1,3 +1,4 @@
+var updateTasks = false;
 var app = angular.module('app', ['ngMaterial', 'ngMessages']);
 
 app.factory('taskService', ['$http',function($http) {
@@ -26,29 +27,12 @@ app.factory('stepsService', ['$http',function($http) {
 
 app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, $mdToast, taskService, stepsService) {
   vm = this;
-  console.log(taskService.getTasks());
-  taskService.getTasks().then(function(newData) {
-    vm.cards = newData.data;
-    if (vm.cards.length === 0) {
-      $mdDialog.show(
-      $mdDialog.alert()
-        .clickOutsideToClose(true)
-        .title('No Tasks!')
-        .textContent('It Looks Like You Have No Tasks, Go Ahead And Make One!')
-        .ariaLabel('No Tasks, make a new one!')
-        .ok('Ok Cool!')
-      );
-    }
-    else {
-      $mdToast.show(
-        $mdToast.simple()
-          .textContent('You have ' + vm.cards.length + ' tasks!')
-          .position('bottom right')
-          .parent(document.getElementById('toast'))
-          .hideDelay(3000)
-      );
-    }
-  });
+
+$scope.$watch(
+  function() {
+    console.log(updateTasks);
+  }
+);
 
   vm.addNewcardStep = function(task) {
     stepsService.sendStep(task,vm.addStep);
@@ -57,7 +41,44 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
 
   vm.deleteTask = function(task) {
     console.log('Task to delete: ' + task);
-    taskService.deleteTask(task);
+    console.log(vm.tasks);
+    taskService.deleteTask(task).then(function(newData) {
+      vm.tasks = newData.data;
+      console.log(newData.data);
+    });
+  };
+
+  vm.submitTask = function() {
+    console.log('Submitting task');
+    console.log(updateTasks);
+    updateTasks = true;
+    var formTitle = document.getElementById('task-name').value;
+    var formDescription = document.getElementById('task-description').value;
+    var formStep = document.getElementsByClassName('send-step');
+    var sendSteps = [];
+    var promise = new Promise (function(resolve, reject) {
+      for (var i = formStep.length; i--;) {
+        if(formStep[i].value.length > 0) {
+          sendSteps.unshift({'step': formStep[i].value, 'checked': false});
+        }
+      }
+      resolve('Success!');
+    });
+    promise.then(function(value) {
+      var sendData = {};
+      sendData.task = formTitle;
+      sendData.description = formDescription;
+      sendData.steps = sendSteps;
+      console.log(vm.tasks);
+      //vm.tasks[vm.tasks.length] = { "task": formTitle, "description": formDescription, "steps": sendSteps };
+      taskService.sendTask(sendData).then(function(newData) {
+        console.log(vm.tasks);
+        console.log(updateTasks);
+        //vm.tasks = newData.data;
+        console.log(newData.data);
+      });
+      $mdDialog.hide();
+    });
   };
 
   vm.newTask = function showDialog($event) {
@@ -66,22 +87,41 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
       parent: parentEl,
       targetEvent: $event,
       templateUrl: '/angular/template/newTask.html',
-      controller: DialogController
+      bindToController: true,
+      controller: 'cardController as task'
     });
   };
 
-
-  function DialogController($scope, $mdDialog) {
-    $scope.closeDialog = function() {
+    vm.closeDialog = function() {
       console.log('Close Dialoge');
+      taskService.getTasks().then(function(newData) {
+      vm.tasks = newData.data;
+      if (vm.tasks.length === 0) {
+        $mdDialog.show(
+        $mdDialog.alert()
+          .clickOutsideToClose(true)
+          .title('No Tasks!')
+          .textContent('It Looks Like You Have No Tasks, Go Ahead And Make One!')
+          .ariaLabel('No Tasks, make a new one!')
+          .ok('Ok Cool!')
+        );
+      }
+      else {
+        console.log(vm.tasks);
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('You have ' + vm.tasks.length + ' tasks!')
+            .position('bottom right')
+            .parent(document.getElementById('toast'))
+            .hideDelay(3000)
+        );
+      }
+    });
       $mdDialog.hide();
     };
-  }
-}]);
 
-app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', '$mdDialog', function($scope, taskService, stepsService, $mdDialog) {
-  vm = this;
   vm.steps = [];
+//Old controller
   vm.addNewStep = function() {
     var newTask = new Promise (function(resolve, reject) {
       vm.newTask = String(vm.steps.length + 1);
@@ -103,31 +143,31 @@ app.controller('newTaskController', ['$scope', 'taskService', 'stepsService', '$
         }
       });
     };
-  vm.submitTask = function() {
-    console.log('Submitting task');
-    var formTitle = document.getElementById('task-name').value;
-    var formDescription = document.getElementById('task-description').value;
-    var formStep = document.getElementsByClassName('send-step');
-    var sendSteps = [];
-    console.log(vm.cards);
 
-    var promise = new Promise (function(resolve, reject) {
-      for (var i = formStep.length; i--;) {
-        if(formStep[i].value.length > 0) {
-          sendSteps.unshift({'step': formStep[i].value, 'checked': false});
-        }
+  vm.initCheck = function() {
+    taskService.getTasks().then(function(newData) {
+      vm.tasks = newData.data;
+      if (vm.tasks.length === 0) {
+        $mdDialog.show(
+        $mdDialog.alert()
+          .clickOutsideToClose(true)
+          .title('No Tasks!')
+          .textContent('It Looks Like You Have No Tasks, Go Ahead And Make One!')
+          .ariaLabel('No Tasks, make a new one!')
+          .ok('Ok Cool!')
+        );
       }
-      resolve('Success!');
+      else {
+        console.log(vm.tasks);
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('You have ' + vm.tasks.length + ' tasks!')
+            .position('bottom right')
+            .parent(document.getElementById('toast'))
+            .hideDelay(3000)
+        );
+      }
     });
-    promise.then(function(value) {
-      var sendData = {};
-      sendData.task = formTitle;
-      sendData.description = formDescription;
-      sendData.steps = sendSteps;
-      console.log(sendData);
-      taskService.sendTask(sendData);
-      $mdDialog.hide();
-    });
-    };
-  }
-]);
+  };
+}]);
+
