@@ -1,3 +1,51 @@
+.show-new-task {
+  display: flex;
+  background-color: rgba(0,0,0,.48);
+  animation-duration: 450ms;
+  animation-name: backdrop-in;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+.show-new-task > div {
+  animation-duration: 450ms;
+  animation-name: newtask-in;
+  visibility: visible;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform: scale(1);
+  z-index: 60;
+  background-color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 7px 8px -4px rgba(0,0,0,.2),0 13px 19px 2px rgba(0,0,0,.14),0 5px 24px 4px rgba(0,0,0,.12);
+}
+
+.dialog-padding {
+  padding: 24px;
+}
+
+.hide-new-task {
+  display: none;
+  z-index: 50;
+  animation-duration: 450ms;
+  animation-name: backdrop-out;
+}
+
+.hide-new-task > div {
+  animation-duration: 450ms;
+  animation-name: newtask-out;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.top-border-radius {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
 #navtabs {
   padding-top: 5px;
 }
@@ -102,4 +150,29 @@
     stroke-dasharray: 90, 150;
     stroke-dashoffset: -124;
   }
+}
+
+
+@keyframes backdrop-in {
+  0%   { background-color: rgba(0,0,0,0); }
+  100% { background-color: rgba(0,0,0,.48); }
+}
+
+@keyframes backdrop-out {
+  0%   { background-color: rgba(0,0,0,.48);
+        display: flex; }
+  100% { background-color: rgba(0,0,0,0);
+        display: none; }
+}
+
+@keyframes newtask-in {
+  0%   { transform: scale(0.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes newtask-out {
+  0%   { transform: scale(1);
+        visibility: visible; }
+  100% { transform: scale(0.2);
+        visibility: hidden; }
 }

@@ -16,7 +16,6 @@ app.factory('taskService', ['$http',function($http) {
   };
 }]);
 
-
 app.factory('stepsService', ['$http',function($http) {
   return {
     sendStep : function(task, newStep) {
@@ -27,12 +26,6 @@ app.factory('stepsService', ['$http',function($http) {
 
 app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, $mdToast, taskService, stepsService) {
   vm = this;
-
-$scope.$watch(
-  function() {
-    console.log(updateTasks);
-  }
-);
 
   vm.addNewcardStep = function(task) {
     stepsService.sendStep(task,vm.addStep);
@@ -74,50 +67,34 @@ $scope.$watch(
       taskService.sendTask(sendData).then(function(newData) {
         console.log(vm.tasks);
         console.log(updateTasks);
-        //vm.tasks = newData.data;
+        vm.tasks = newData.data;
         console.log(newData.data);
       });
-      $mdDialog.hide();
+      var taskDialog = document.getElementById('new-task');
+      taskDialog.setAttribute("class", "hide-new-task");
     });
   };
 
-  vm.newTask = function showDialog($event) {
-    var parentEl = angular.element(document.body);
-    $mdDialog.show({
-      parent: parentEl,
-      targetEvent: $event,
-      templateUrl: '/angular/template/newTask.html',
-      bindToController: true,
-      controller: 'cardController as task'
-    });
+  vm.newTask = function() {
+    var taskDialog = document.getElementById('new-task');
+    taskDialog.setAttribute("class", "show-new-task md-dialog-container md-dialog-backdrop md-opaque ng-scope");
   };
 
     vm.closeDialog = function() {
       console.log('Close Dialoge');
       taskService.getTasks().then(function(newData) {
       vm.tasks = newData.data;
-      if (vm.tasks.length === 0) {
-        $mdDialog.show(
-        $mdDialog.alert()
-          .clickOutsideToClose(true)
-          .title('No Tasks!')
-          .textContent('It Looks Like You Have No Tasks, Go Ahead And Make One!')
-          .ariaLabel('No Tasks, make a new one!')
-          .ok('Ok Cool!')
-        );
-      }
-      else {
-        console.log(vm.tasks);
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('You have ' + vm.tasks.length + ' tasks!')
-            .position('bottom right')
-            .parent(document.getElementById('toast'))
-            .hideDelay(3000)
-        );
-      }
+      console.log(vm.tasks);
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent('You have ' + vm.tasks.length + ' tasks!')
+          .position('bottom right')
+          .parent(document.getElementById('toast'))
+          .hideDelay(3000)
+      );
     });
-      $mdDialog.hide();
+      var taskDialog = document.getElementById('new-task');
+      taskDialog.setAttribute("class", "hide-new-task");
     };
 
   vm.steps = [];

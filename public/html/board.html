@@ -73,7 +73,7 @@
                 </md-card-content>
               </md-card>
             </div>
-          <md-button id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.newTask($event)">
+          <md-button id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.newTask()">
             <md-icon md-svg-src="/images/board/task.svg" style="display: inline;"></md-icon>
             <md-tooltip>
               New Task
@@ -81,6 +81,55 @@
           </md-button>
           <div id="toast">
           </div>
+          <div id="new-task" class="md-dialog-container hide-new-task">
+            <div class="ng-scope md-transition-in md-dialog">
+              <form id="task-form" method="post">
+                <md-toolbar class="top-border-radius">
+                  <div class="md-toolbar-tools top-border-radius">
+                    <h2>Create Task</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="card.closeDialog()">
+                      <md-icon aria-label="Close dialog"></md-icon>
+                    </md-button>
+                  </div>
+                </md-toolbar>
+                <md-dialog-content class="ng-scope md-transition-in md-dialog-content">
+                  <div class="md-dialog-content dialog-padding" layout-align="center center" layout="column">
+                    <div layout="row">
+                      <md-input-container>
+                        <label>Task Name:</label>
+                        <input autocomplete="off" md-autofocus type="text" id="task-name">
+                      </md-input-container>
+                      <md-input-container>
+                        <label>Description:</label>
+                        <textarea autocomplete="off" type="text" id="task-description"></textarea>
+                      </md-input-container>
+                    </div>
+                    <div layout="row" layout-align="start end">
+                      <div layout="column" layout-align="start start">
+                        <div data-ng-repeat="step in card.steps">
+                          <md-input-container layout-align="start start">
+                            <label>{{step.label}}</label>
+                            <input  autocomplete="off" class="send-step" type="text" name="step" ng-keyup="$event.keyCode == 13 ? card.addNewStep() : null">
+                          </md-input-container>
+                        </div>
+                      </div>
+                      <md-button md-no-ink class="md-primary" ng-click="card.addNewStep()">Add Step</md-button>
+                    </div>
+                  </div>
+                </md-dialog-content>
+              <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="card.closeDialog()">
+                  Cancel
+                </md-button>
+                <md-button ng-Click="card.submitTask()" style="margin-right:20px;">
+                  Save
+                </md-button>
+              </md-dialog-actions>
+            </form>
+          </div>
+        </div>
         </md-tab-content>
       </md-tab>
       <md-tab label="Settings">
