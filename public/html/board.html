@@ -30,34 +30,9 @@
                         {{step.step}}
                       </md-checkbox>
                     </div>
-                    <!--
-                    <md-button flex-gt-xs="20" class="md-icon-button" aria-label="Add Step" ng-click="card.addNewcardStep(text.task)">
-                      <md-icon class="button-shadow" md-svg-src="/images/board/add.svg"></md-icon>
-                      <md-tooltip>
-                        Add Step
-                      </md-tooltip>
-                    </md-button>
-                    <md-input-container flex-gt-xs="65">
-                      <label>Add new step</label>
-                      <input type="text" ng-model="card.addStep" ng-keyup="$event.keyCode == 13 ? card.addNewcardStep(text.task) : null" required>
-                    </md-input-container>
-                    -->
                   </div>
                   <!-- We put checklist adding ehre with class layout-coulumn?? -->
                   <md-card-actions flex-gt-xs="10" layout="column" layout-align="end end">
-                  <!--
-                    <button class="md-icon-button md-button" md-ink-ripple type="button" aria-label="Edit">
-                      <md-icon md-svg-icon="/images/board/popout.svg" class="ng-scope ng-isolate-scope" aria-label="Edit Task">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet">
-                          <path d="M0 0h18v18h-18z" fill="none"></path>
-                          <path d="M2 13.5h14v-1.5h-14v1.5zm0-4h14v-1.5h-14v1.5zm0-5.5v1.5h14v-1.5h-14z"></path>
-                        </svg>
-                      </md-icon>
-                      <md-tooltip>
-                        Edit Task
-                      </md-tooltip>
-                    </button>
-                  -->
                     <button ng-click="card.deleteTask(text.task)" class="md-icon-button md-button" md-ink-ripple  type="button" aria-label="Delete">
                       <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Delete task">
                         <svg version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet"><g><g>
@@ -73,17 +48,16 @@
                 </md-card-content>
               </md-card>
             </div>
-          <md-button id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.newTask()">
-            <md-icon md-svg-src="/images/board/task.svg" style="display: inline;"></md-icon>
-            <md-tooltip>
-              New Task
-            </md-tooltip>
-          </md-button>
-          <div id="toast">
-          </div>
-          <div id="new-task" class="md-dialog-container hide-new-task">
-            <div class="ng-scope md-transition-in md-dialog">
-              <form id="task-form" method="post">
+            <md-button id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.openTask()">
+              <md-icon md-svg-src="/images/board/task.svg" style="display: inline;"></md-icon>
+              <md-tooltip>
+                New Task
+              </md-tooltip>
+            </md-button>
+            <div id="toast">
+            </div>
+            <div id="new-task" class="md-dialog-container hide-new-task">
+              <div class="ng-scope md-transition-in md-dialog">
                 <md-toolbar class="top-border-radius">
                   <div class="md-toolbar-tools top-border-radius">
                     <h2>Create Task</h2>
@@ -118,31 +92,30 @@
                     </div>
                   </div>
                 </md-dialog-content>
-              <md-dialog-actions layout="row">
-                <span flex></span>
-                <md-button ng-click="card.closeDialog()">
-                  Cancel
-                </md-button>
-                <md-button ng-Click="card.submitTask()" style="margin-right:20px;">
-                  Save
-                </md-button>
-              </md-dialog-actions>
-            </form>
-          </div>
-        </div>
-        </md-tab-content>
-      </md-tab>
-      <md-tab label="Settings">
-        <md-button class="md-raised md-warn"  href="/logout">Logout</md-button>
-      </md-tab>
-    </md-tabs>
-  </md-content>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.4/angular-material.min.js"></script>
-<script src="/js/board.service.js"></script>
+                <md-dialog-actions layout="row">
+                  <span flex></span>
+                  <md-button ng-click="card.closeDialog()">
+                    Cancel
+                  </md-button>
+                  <md-button ng-Click="card.submitTask()" style="margin-right:20px;">
+                    Save
+                  </md-button>
+                </md-dialog-actions>
+              </div>
+            </div>
+          </md-tab-content>
+        </md-tab>
+        <md-tab label="Settings">
+          <md-button class="md-raised md-warn"  href="/logout">Logout</md-button>
+        </md-tab>
+      </md-tabs>
+    </md-content>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.4/angular-material.min.js"></script>
+  <script src="/js/board.service.js"></script>
 </body>
 </html>
