@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
-mongoose.connect('ds051625.mongolab.com:51625/success', {
-  user: 'digibitstech',
-  pass: 'applesandpeaches4life'});
+mongoose.connect('mongodb://localhost/success', function(err) {
+  if(err) {console.log(err);}
+});
 
 var AccountSchema = new mongoose.Schema({
   firstname: { type: String, required: true },

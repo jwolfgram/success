@@ -75,7 +75,13 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     });
   };
 
-  vm.newTask = function() {
+  vm.openTask = function() {
+    vm.steps = [];
+    var input = document.getElementById('new-task').getElementsByTagName('input');
+    for (var i = 0; input.length > i; i++) {
+      input[i].value = null;
+    }
+    document.getElementsByTagName('textarea')[0].value = null;
     var taskDialog = document.getElementById('new-task');
     taskDialog.setAttribute("class", "show-new-task md-dialog-container md-dialog-backdrop md-opaque ng-scope");
   };
@@ -112,7 +118,7 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     newTask.then(
       function(value) {
         if (value === 'Success!') {
-          var input = document.getElementById('task-form').getElementsByTagName('input');
+          var input = document.getElementById('new-task').getElementsByTagName('input');
           input[input.length - 1].focus();
         }
         else {
