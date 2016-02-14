@@ -4,6 +4,21 @@ mongoose.connect('mongodb://localhost/success', function(err) {
   if(err) {console.log(err);}
 });
 
+var StepsSchema = new mongoose.Schema({
+  step: String,
+  checked: {type: Boolean, default: false}
+});
+
+var TaskSchema = new mongoose.Schema({
+    task: {
+      type: String
+    },
+    description: {
+      type: String
+    },
+    steps: [StepsSchema]
+});
+
 var AccountSchema = new mongoose.Schema({
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
@@ -13,46 +28,16 @@ var AccountSchema = new mongoose.Schema({
     unique: true
   },
   password: { type: String, required: true, validate: /^(?=.*\d).{6,20}$/ },
-  tasks: [{
-    task: {
-      type: String
-    },
-    description: {
-      type: String
-    },
-    steps: {
-      type: Array
-    },
-    _id: false
-  }]
+  tasks: [TaskSchema]
 });
 
 var Account = mongoose.model('account', AccountSchema);
-
-var TaskSchema = new mongoose.Schema({
-  firstname: { type: String, required: true },
-  lastname: { type: String, required: true },
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: { type: String, required: true, validate: /^(?=.*\d).{6,20}$/ },
-  tasks: [{
-    task: {
-      type: String
-    },
-    description: {
-      type: String
-    },
-    steps: {
-      type: [{step: {type: String, required: true}}, {checked: {type: Boolean, default: false}}]
-    },
-    _id: false
-  }]
-});
 
 //var Task = mongoose.model('account', TaskSchema);
 
 
 exports.Account = Account;
+exports.StepsSchema = StepsSchema;
+exports.TaskSchema = TaskSchema;
+exports.AccountSchema = AccountSchema;
+
