@@ -184,15 +184,26 @@ app.post('/api/step', bodyParser.json(), function(req, res) {
   db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
     var sendData = function() {
       console.log('Resending data!');
-      console.log(docs);
       res.json(docs[0].tasks); //is sending, front end will need
     };
     if (docs.length === 0) {
       console.log(err);
     }
     else {
-      var task = docs[0].tasks.id(req.body[0]);
-      task.steps.push({step: req.body[1]});
+      var task = docs[0].tasks.id(req.body[1]);
+      if (req.body[0] === 'new') {
+        task.steps.push({step: req.body[2]});
+      }
+      if (req.body[0] === 'checkbox') {
+        var step = task.steps.id(req.body[2]);
+        if (step.checked === false) {
+          console.log('It was false!');
+          step.checked = true;
+        }
+        else {
+          step.checked = false;
+        }
+      }
       docs[0].save(sendData());
     }
   });

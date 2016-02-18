@@ -18,8 +18,11 @@ app.factory('taskService', ['$http',function($http) {
 
 app.factory('stepsService', ['$http',function($http) {
   return {
-    sendStep : function(task, newStep) {
-      return $http.post('/api/step', [task, newStep]);
+    sendStep : function(taskID, stepName) {
+      return $http.post('/api/step', ['new' ,taskID, stepName]);
+    },
+    toggleCheck : function(taskID, stepID) {
+      return $http.post('/api/step', ['checkbox' ,taskID, stepID]);
     }
   };
 }]);
@@ -27,11 +30,17 @@ app.factory('stepsService', ['$http',function($http) {
 app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, $mdToast, taskService, stepsService) {
   vm = this;
 
-  vm.addCardStep = function(task) {
-    stepsService.sendStep(task,vm.addStep).then(function(newData) {
+  vm.addCardStep = function(taskID) {
+    stepsService.sendStep(taskID,vm.addStep).then(function(newData) {
       vm.tasks = newData.data;
     });
     vm.addStep = null;
+  };
+
+  vm.toggleCheck = function(taskID,stepID) {
+    stepsService.toggleCheck(taskID,stepID).then(function(newData) {
+      vm.tasks = newData.data;
+    });
   };
 
   vm.deleteTask = function(task) {

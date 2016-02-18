@@ -31,7 +31,7 @@
 
                   <div layout="column">
                     <div ng-repeat="step in text.steps">
-                      <md-checkbox aria-label="checkbox" checked={{step.checked}}>
+                      <md-checkbox aria-label="checkbox" ng-click="card.toggleCheck(text._id,step._id)" ng-checked={{step.checked}}>
                         {{step.step}}
                       </md-checkbox>
                     </div>
