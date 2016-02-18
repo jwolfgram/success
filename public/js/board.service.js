@@ -84,7 +84,7 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     });
   };
 
-  vm.openTask = function() {
+  vm.NewTask = function() {
     vm.steps = [];
     var input = document.getElementById('new-task').getElementsByTagName('input');
     for (var i = 0; input.length > i; i++) {
@@ -95,9 +95,9 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     taskDialog.setAttribute("class", "show-new-task md-dialog-container md-dialog-backdrop md-opaque ng-scope");
   };
 
-    vm.closeDialog = function() {
-      console.log('Close Dialoge');
-      taskService.getTasks().then(function(newData) {
+  vm.closeDialog = function() {
+    console.log('Close Dialoge');
+    taskService.getTasks().then(function(newData) {
       vm.tasks = newData.data;
       console.log(vm.tasks);
       $mdToast.show(
@@ -108,30 +108,36 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
           .hideDelay(3000)
       );
     });
-      var taskDialog = document.getElementById('new-task');
-      taskDialog.setAttribute("class", "hide-new-task");
-    };
+    var taskDialog = document.getElementById('new-task');
+    taskDialog.setAttribute("class", "hide-new-task");
+  };
 
   vm.steps = [];
 //Old controller
-  vm.addNewStep = function() {
+  vm.addNewStep = function(tab) {
     var newTask = new Promise (function(resolve, reject) {
       vm.newTask = String(vm.steps.length + 1);
       var newStep = {};
       newStep.id = 'step' + vm.newTask;
       newStep.label = 'Step ' + vm.newTask;
       vm.steps.push(newStep);
-      resolve('Success!');
+      resolve();
     });
 
     newTask.then(
       function(value) {
-        if (value === 'Success!') {
-          var input = document.getElementById('new-task').getElementsByTagName('input');
-          input[input.length - 1].focus();
+        console.log('Attempting adding step');
+        var input = document.getElementById('new-task').getElementsByTagName('input');
+        if (tab === "tab") {
+          input[input.length - 2].focus();
         }
         else {
-          console(value);
+          if (tab === "enter") {
+            console.log('Detected enter key');
+          }
+          else {
+            input[input.length - 1].focus();
+          }
         }
       });
     };

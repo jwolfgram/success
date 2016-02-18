@@ -18,7 +18,7 @@
             <div id="card-layout" layout-align="center" md-padding layout="row" layout-wrap>
 
 
-              <md-card flex-xs="100" flex-sm="45" flex-md="30" flex-lg="20" flex-xl="20" ng-repeat="text in card.tasks track by $index" class="card">
+              <md-card flex-xs="100" flex-sm="100" flex-md="45" flex-lg="45" flex-xl="30" ng-repeat="text in card.tasks track by $index" class="card">
                 <md-card-title>
                   <md-card-title-text>
                     <span class="md-headline">{{text.task}}</span>
@@ -36,7 +36,7 @@
                       </md-checkbox>
                     </div>
                     <div div layout="row">
-                      <md-button flex-gt-xs="20" class="md-icon-button" aria-label="Add Step" ng-click="card.addCardStep(text._id)">
+                      <md-button id="addtask-btn" flex-gt-xs="20" class="md-icon-button" aria-label="Add Step" ng-click="card.addCardStep(text._id)">
                         <md-icon class="button-shadow" md-svg-src="/images/board/add.svg"></md-icon>
                         <md-tooltip>
                           Add Step
@@ -49,7 +49,7 @@
                     </div>
                   </div>
                   <md-card-actions flex-gt-xs="10" layout="column" layout-align="end end">
-                    <button class="md-icon-button md-button" md-ink-ripple type="button" aria-label="Edit">
+                    <button ng-click="card.EditTask(text._id)" class="md-icon-button md-button" md-ink-ripple type="button" aria-label="Edit">
                       <md-icon md-svg-icon="/images/board/popout.svg" class="ng-scope ng-isolate-scope" aria-label="Edit Task">
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet">
                           <path d="M0 0h18v18h-18z" fill="none"></path>
@@ -75,7 +75,7 @@
                 </md-card-content>
               </md-card>
             </div>
-            <md-button id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.openTask()">
+            <md-button id="addTask" class="md-fab md-primary" aria-label="New Task" ng-click="card.NewTask()">
               <md-icon md-svg-src="/images/board/task.svg" style="display: inline;"></md-icon>
               <md-tooltip>
                 New Task
@@ -111,7 +111,7 @@
                         <div data-ng-repeat="step in card.steps">
                           <md-input-container layout-align="start start">
                             <label>{{step.label}}</label>
-                            <input  autocomplete="off" class="send-step" type="text" name="step" ng-keyup="$event.keyCode == 13 ? card.addNewStep() : null">
+                            <input  autocomplete="off" class="send-step" type="text" name="step" ng-keydown="$event.keyCode == 9 ? card.addNewStep('tab') : null">
                           </md-input-container>
                         </div>
                       </div>
