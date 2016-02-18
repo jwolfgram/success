@@ -84,6 +84,10 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     });
   };
 
+  vm.EditTask = function() {
+
+  };
+
   vm.NewTask = function() {
     vm.steps = [];
     var input = document.getElementById('new-task').getElementsByTagName('input');
