@@ -181,30 +181,21 @@ app.post('/api/task/delete', bodyParser.json(), function(req, res) { //This will
 });
 
 app.post('/api/step', bodyParser.json(), function(req, res) {
-  var addStep = new Promise (function(resolve, reject) {
-    console.log('Sent step');
-    resolve();
-  });
-  addStep.then(
-    function(value) {
-      db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
-        var sendData = function() {
-          console.log('Resending data!');
-          console.log(docs);
-          res.json(docs[0].tasks); //is sending, front end will need
-        };
-        if (docs.length === 0) {
-          console.log(err);
-        }
-        else {
-          console.log(docs[0]);
-          console.log(docs[0].tasks[0].steps);
-          docs[0].tasks[0].update({task: req.body[0]}, { steps: { $push: {step: req.body[1]}}});
-          docs[0].save(sendData());
-        }
-      });
+  db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
+    var sendData = function() {
+      console.log('Resending data!');
+      console.log(docs);
+      res.json(docs[0].tasks); //is sending, front end will need
+    };
+    if (docs.length === 0) {
+      console.log(err);
     }
-  );
+    else {
+      var task = docs[0].tasks.id(req.body[0]);
+      task.steps.push({step: req.body[1]});
+      docs[0].save(sendData());
+    }
+  });
 });
 
 app.use('/angular/template/', express.static('public/angularTemplates'));

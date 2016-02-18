@@ -27,14 +27,14 @@ app.factory('stepsService', ['$http',function($http) {
 app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, $mdToast, taskService, stepsService) {
   vm = this;
 
-  vm.addNewcardStep = function(task) {
-    stepsService.sendStep(task,vm.addStep);
+  vm.addCardStep = function(task) {
+    stepsService.sendStep(task,vm.addStep).then(function(newData) {
+      vm.tasks = newData.data;
+    });
     vm.addStep = null;
   };
 
   vm.deleteTask = function(task) {
-    console.log('Task to delete: ' + task);
-    console.log(vm.tasks);
     taskService.deleteTask(task).then(function(newData) {
       vm.tasks = newData.data;
       console.log(newData.data);

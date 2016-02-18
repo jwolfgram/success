@@ -16,6 +16,8 @@
           <md-tab-content ng-cloak>
           <!--Card for ng-repeat-->
             <div id="card-layout" layout-align="center" md-padding layout="row" layout-wrap>
+
+
               <md-card flex-xs="100" flex-sm="45" flex-md="30" flex-lg="20" flex-xl="20" ng-repeat="text in card.tasks track by $index" class="card">
                 <md-card-title>
                   <md-card-title-text>
@@ -23,16 +25,41 @@
                     <span class="md-subhead">{{text.description}}</span>
                   </md-card-title-text>
                 </md-card-title>
+
+
                 <md-card-content layout="row" layout-align="space-around start" class="layout-align-space-between-stretch">
-                  <div>
+
+                  <div layout="column">
                     <div ng-repeat="step in text.steps">
                       <md-checkbox aria-label="checkbox" checked={{step.checked}}>
                         {{step.step}}
                       </md-checkbox>
                     </div>
+                    <div div layout="row">
+                      <md-button flex-gt-xs="20" class="md-icon-button" aria-label="Add Step" ng-click="card.addCardStep(text._id)">
+                        <md-icon class="button-shadow" md-svg-src="/images/board/add.svg"></md-icon>
+                        <md-tooltip>
+                          Add Step
+                        </md-tooltip>
+                      </md-button>
+                      <md-input-container flex-gt-xs="65">
+                        <label>Add new step</label>
+                        <input type="text" ng-model="card.addStep" ng-keyup="$event.keyCode == 13 ? card.addCardStep(text._id) : null" required>
+                      </md-input-container>
+                    </div>
                   </div>
-                  <!-- We put checklist adding ehre with class layout-coulumn?? -->
                   <md-card-actions flex-gt-xs="10" layout="column" layout-align="end end">
+                    <button class="md-icon-button md-button" md-ink-ripple type="button" aria-label="Edit">
+                      <md-icon md-svg-icon="/images/board/popout.svg" class="ng-scope ng-isolate-scope" aria-label="Edit Task">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet">
+                          <path d="M0 0h18v18h-18z" fill="none"></path>
+                          <path d="M2 13.5h14v-1.5h-14v1.5zm0-4h14v-1.5h-14v1.5zm0-5.5v1.5h14v-1.5h-14z"></path>
+                        </svg>
+                      </md-icon>
+                      <md-tooltip>
+                        Edit Task
+                      </md-tooltip>
+                    </button>
                     <button ng-click="card.deleteTask(text.task)" class="md-icon-button md-button" md-ink-ripple  type="button" aria-label="Delete">
                       <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Delete task">
                         <svg version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet"><g><g>
