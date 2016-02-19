@@ -4,24 +4,25 @@ body {
 
 #nav {
   padding-top: 20px;
+  top: 0px;
   position: absolute;
   left: 0px;
 }
 
 #login {
-  max-width: 80%;
-  min-width: 20%;
+  margin: 10%;
   border-radius: 2px;
   background: #FFF;
-  padding: 5px;
+  padding: 10px;
   box-shadow: 2px 2px 6px 0px rgba(0,0,0,0.75);
   position: relative;
+  text-align: center;
   animation-duration: 450ms;
   animation-name: login-in;
 }
 
 #signin-btn {
-  text-align: center;
+  
 }
 
 #background {

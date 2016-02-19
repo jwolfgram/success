@@ -5,16 +5,24 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
   <link rel="stylesheet" href="/style/login.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.4/angular-material.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="/js/login.service.js"></script>
 </head>
-<body ng-app="validationApp" ng-cloak>
-  <div id="background">
+<body ng-app="validationApp">
+  <div layout="row" id="background">
     <div id="nav">
       <md-button type="submit" class="md-raised md-warn" data-toggle="modal" data-target="#signup">Signup</md-button>
       <md-button type="submit" class="md-raised md-primary" data-toggle="modal" data-target="#about">About</md-button>
     </div>
-    <div id="login">
-      <form layout="column" action="/" method="post">
-        <h2 class="form-signin-heading center-block">LOGIN</h2>
+    <div flex-gt-sm="30" flex-xs="80" flex-sm="50" id="login">
+      <form layout="column" ng-cloak action="/" method="post">
+        <h2>LOGIN</h2>
         <md-input-container>
           <label>Username</label>
           <input name="username" type="text">
@@ -34,10 +42,10 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h3 class="modal-title" id="myModalLabel">About - Get  it done!</h3>
+          <h3 class="modal-title" id="myModalLabel">About - Success!</h3>
         </div>
         <div class="modal-body">
-          <p>Get it done is a task manager made for the modern multitasker, including steps to complete your task and a space to take notes while working on your projects so you can remember where you left off when life calls you away.</p>
+          <p>Success is a task manager made for the modern multitasker, including steps to complete your task and a space to take notes while working on your projects so you can remember where you left off when life calls you away.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -90,13 +98,5 @@
       </div>
     </div>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.4/angular-material.min.js"></script>
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="/js/login.service.js"></script>
 </body>
 </html>

@@ -3,6 +3,12 @@
 <head>
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
   <link rel="stylesheet" href="/style/board.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.4/angular-material.min.js"></script>
+  <script src="/js/board.service.js"></script>
 </head>
 <body ng-app="app">
   <div ng-cloak ng-controller="cardController as card" layout="column" layout-fill ng-init="card.initCheck()">
@@ -13,12 +19,12 @@
     <md-content layout="column" flex>
       <md-tabs id="tabs" layout="column" flex>
         <md-tab layout="column" label="Home">
-          <md-tab-content ng-cloak>
+          <md-tab-content ng-cloak="">
           <!--Card for ng-repeat-->
-            <div id="card-layout" layout-align="center" md-padding layout="row" layout-wrap>
+            <div id="card-layout" layout-align="center" md-padding layout-gt-md="row" layout="column" layout-wrap>
 
 
-              <md-card flex-xs="100" flex-sm="100" flex-md="45" flex-lg="30" flex-xl="30" ng-repeat="text in card.tasks track by $index" class="card">
+              <md-card layout-gt-md="column" layout="row" ng-repeat="text in card.tasks" class="card">
                 <md-card-title>
                   <md-card-title-text>
                     <span class="md-headline">{{text.task}}</span>
@@ -30,19 +36,20 @@
                 <md-card-content layout="row" layout-align="space-around start" class="layout-align-space-between-stretch">
 
                   <div layout="column">
+                  <h4 hide-gt-md>Steps:</h4>
                     <div ng-repeat="step in text.steps">
                       <md-checkbox aria-label="checkbox" ng-click="card.toggleCheck(text._id,step._id)" ng-checked={{step.checked}}>
                         {{step.step}}
                       </md-checkbox>
                     </div>
                     <div div layout="row">
-                      <md-button id="addtask-btn" flex-gt-xs="20" class="md-icon-button" aria-label="Add Step" ng-click="card.addCardStep(text._id)">
+                      <md-button id="addtask-btn" flex="20" class="md-icon-button" aria-label="Add Step" ng-click="card.addCardStep(text._id)">
                         <md-icon class="button-shadow" md-svg-src="/images/board/add.svg"></md-icon>
                         <md-tooltip>
                           Add Step
                         </md-tooltip>
                       </md-button>
-                      <md-input-container flex-gt-xs="65">
+                      <md-input-container flex="65">
                         <label>Add new step</label>
                         <input type="text" ng-model="card.addStep" ng-keyup="$event.keyCode == 13 ? card.addCardStep(text._id) : null" required>
                       </md-input-container>
@@ -138,11 +145,5 @@
       </md-tabs>
     </md-content>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.4/angular-material.min.js"></script>
-  <script src="/js/board.service.js"></script>
 </body>
 </html>
