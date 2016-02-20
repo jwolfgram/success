@@ -68,7 +68,7 @@
 #steps {
   overflow-y: auto;
   padding: 5px;
-  max-height: 50vh;
+  max-height: 30vh;
 }
 
 #toast {

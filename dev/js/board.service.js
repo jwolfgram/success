@@ -1,4 +1,3 @@
-var updateTasks = false;
 var app = angular.module('app', ['ngMaterial', 'ngMessages']);
 
 app.factory('taskService', ['$http',function($http) {
@@ -27,7 +26,7 @@ app.factory('stepsService', ['$http',function($http) {
   };
 }]);
 
-app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast', 'taskService', 'stepsService', function($scope, $mdMedia, $mdDialog, $mdToast, taskService, stepsService) {
+app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast', 'taskService', 'stepsService', '$location', '$anchorScroll', function($scope, $mdMedia, $mdDialog, $mdToast, taskService, stepsService, $location, $anchorScroll) {
   vm = this;
 
   vm.addCardStep = function(taskID) {
@@ -43,22 +42,29 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     });
   };
 
-  vm.deleteTask = function(task) {
-    taskService.deleteTask(task).then(function(newData) {
+  vm.deleteTask = function(id) {
+    taskService.deleteTask(id).then(function(newData) {
       vm.tasks = newData.data;
       console.log(newData.data);
     });
   };
 
   vm.submitTask = function() {
-    console.log('Submitting task');
-    console.log(updateTasks);
-    updateTasks = true;
+    var remindSend;
     var formTitle = document.getElementById('task-name').value;
-    var formDescription = document.getElementById('task-description').value;
     var formStep = document.getElementsByClassName('send-step');
     var sendSteps = [];
+
     var promise = new Promise (function(resolve, reject) {
+      var remindDate = vm.remindDate;
+      var remindTime = vm.remindTime;
+      var remindDate = remindDate.toString();
+      var remindTime = remindTime.toString();
+      var date = remindDate.substring(0, 15);
+      var time = remindTime.substring(15, remindTime.length);
+      remindSend = new Date(date + time);
+      console.log(vm.dueDate);
+      console.log(remindSend);
       for (var i = formStep.length; i--;) {
         if(formStep[i].value.length > 0) {
           sendSteps.unshift({'step': formStep[i].value, 'checked': false});
@@ -69,15 +75,11 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     promise.then(function(value) {
       var sendData = {};
       sendData.task = formTitle;
-      sendData.description = formDescription;
       sendData.steps = sendSteps;
-      console.log(vm.tasks);
-      //vm.tasks[vm.tasks.length] = { "task": formTitle, "description": formDescription, "steps": sendSteps };
+      sendData.due = vm.dueDate;
+      sendData.remind = remindSend;
       taskService.sendTask(sendData).then(function(newData) {
-        console.log(vm.tasks);
-        console.log(updateTasks);
         vm.tasks = newData.data;
-        console.log(newData.data);
       });
       var taskDialog = document.getElementById('new-task');
       taskDialog.setAttribute("class", "hide-new-task");
@@ -85,7 +87,7 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
   };
 
   vm.EditTask = function() {
-
+    //Stuff for edit task overlay
   };
 
   vm.NewTask = function() {
@@ -94,7 +96,6 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     for (var i = 0; input.length > i; i++) {
       input[i].value = null;
     }
-    document.getElementsByTagName('textarea')[0].value = null;
     var taskDialog = document.getElementById('new-task');
     taskDialog.setAttribute("class", "show-new-task md-dialog-container md-dialog-backdrop md-opaque ng-scope");
   };
@@ -138,14 +139,18 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
         var input = document.getElementById('new-task').getElementsByTagName('input');
         console.log('keycode: ' + keyCode);
         if (keyCode === 9) {
-          input[input.length - 2].focus();
+          input[input.length - 4].focus();
+          $location.hash('newAddStep');
+          $anchorScroll();
         }
         if (keyCode === 13) {
           console.log('Detected enter key');
           vm.submitTask();
         }
         if (keyCode === "button") {
-          input[input.length - 1].focus();
+          input[input.length - 3].focus();
+           $location.hash('newAddStep');
+          $anchorScroll();
         }
       }
     );

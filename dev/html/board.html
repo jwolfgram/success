@@ -24,8 +24,6 @@
           <md-tab-content ng-cloak="">
           <!--Card for ng-repeat-->
             <div id="card-layout" layout-align="center" md-margin layout-gt-sm="row" layout="column" layout-wrap>
-
-
               <md-card layout-gt-sm="column" layout="row" ng-repeat="text in card.tasks" class="card">
                 <md-card-title>
                   <md-card-title-text>
@@ -33,8 +31,6 @@
                     <span class="md-subhead">{{text.description}}</span>
                   </md-card-title-text>
                 </md-card-title>
-
-
                 <md-card-content layout="row" layout-align="space-around start" class="layout-align-space-between-stretch">
 
                   <div layout="column">
@@ -69,7 +65,7 @@
                         Edit Task
                       </md-tooltip>
                     </button>
-                    <button ng-click="card.deleteTask(text.task)" class="md-icon-button md-button" md-ink-ripple  type="button" aria-label="Delete">
+                    <button ng-click="card.deleteTask(text._id)" class="md-icon-button md-button" md-ink-ripple  type="button" aria-label="Delete">
                       <md-icon md-svg-icon="/images/board/close.svg" class="ng-scope ng-isolate-scope" aria-label="Delete task">
                         <svg version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet"><g><g>
                           <path fill="#7d7d7d" d="M21,11l-7-7v4C7,9,4,14,3,19c2.5-3.5,6-5.1,11-5.1V18L21,11z"></path>
@@ -92,6 +88,7 @@
             </md-button>
             <div id="toast">
             </div>
+            <!-- New Task Dialoge -->
             <div id="new-task" class="md-dialog-container hide-new-task">
               <div class="ng-scope md-transition-in md-dialog">
                 <md-toolbar class="top-border-radius">
@@ -104,18 +101,15 @@
                   </div>
                 </md-toolbar>
                 <md-dialog-content class="ng-scope md-transition-in md-dialog-content">
-                  <div class="md-dialog-content dialog-padding" layout-align="center center" layout="column">
-                    <div layout="row">
+                  <div class="md-dialog-content dialog-padding" layout-align="center center" layout="row">
+
+                    <div layout="column" layout-padding>
+                      <h4>Task</h4>
                       <md-input-container>
                         <label>Task Name:</label>
                         <input autocomplete="off" md-autofocus type="text" id="task-name">
                       </md-input-container>
-                      <md-input-container>
-                        <label>Description:</label>
-                        <textarea autocomplete="off" type="text" id="task-description"></textarea>
-                      </md-input-container>
-                    </div>
-                    <div layout="row" layout-align="start end">
+                      <h4>Steps</h4>
                       <div id="steps" layout="column" layout-align="start start">
                         <div data-ng-repeat="step in card.steps">
                           <md-input-container layout-align="start start">
@@ -123,10 +117,29 @@
                             <input  autocomplete="off" class="send-step" type="text" name="step" ng-keydown="card.addNewStep($event.keyCode)">
                           </md-input-container>
                         </div>
+                        <md-button id="newAddStep" md-no-ink class="md-primary" ng-click="card.addNewStep('button')">Add Step</md-button>
                       </div>
-                      <md-button md-no-ink class="md-primary" ng-click="card.addNewStep('button')">Add Step</md-button>
+                    </div>
+
+                    <div layout="column" layout-align="start center">
+
+                    <h4>Due Date</h4>
+                      <div layout="column" layout-align="space-between end">
+                        <md-datepicker ng-model="card.dueDate"></md-datepicker>
+                      </div>
+
+                      <h4>Reminder</h4>
+                      <div layout="column" layout-align="space-between end">
+                        <md-input-container>
+                          <label>Time:</label>
+                          <input ng-model="card.remindTime" type="time">
+                        </md-input-container>
+                        <md-datepicker ng-model="card.remindDate"></md-datepicker>
+                      </div>
                     </div>
                   </div>
+
+
                 </md-dialog-content>
                 <md-dialog-actions layout="row">
                   <span flex></span>

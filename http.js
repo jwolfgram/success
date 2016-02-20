@@ -121,7 +121,7 @@ app.post('/api/task', bodyParser.json(), function(req, res) { //This will send t
   var addTask = new Promise (function(resolve, reject) {
     db.Account.findOneAndUpdate(
     {'username': req.user},
-    {$push: {tasks: {'task': req.body[0].task, 'steps': req.body[0].steps, 'description': req.body[0].description}}},
+    {$push: {tasks: {'task': req.body[0].task, 'steps': req.body[0].steps, 'due': req.body[0].due, 'remind': req.body[0].remind}}},
     function (err, docs) {
       if (err) {
         console.log(err); //Possibly if it will not make on its own, create new task
@@ -148,11 +148,10 @@ app.post('/api/task', bodyParser.json(), function(req, res) { //This will send t
 app.post('/api/task/delete', bodyParser.json(), function(req, res) { //This will send the users task along with the steps for ng-repete to display
   console.log(req.body[0]);
   var deleteTask = new Promise (function(resolve, reject) {
-    db.Account.update({username: req.user}, {$pull: {tasks: {task: req.body[0]}}}, function (err, docs) {
+    db.Account.update({username: req.user}, {$pull: {tasks: {_id: req.body[0]}}}, function (err, docs) {
       console.log('Deleted Task');
       if (err) {
         console.log(err);
-        reject('Failed');
       }
       else {
         resolve("Success!");
@@ -209,10 +208,9 @@ app.post('/api/step', bodyParser.json(), function(req, res) {
   });
 });
 
-app.use('/angular/template/', express.static('public/angularTemplates'));
 app.use('/angular', express.static('node_modules/angular-route/'));
 app.use('/style',express.static('public/css')); //Route to /style for css
-app.use('/js',express.static('public/js')); //Route to /js for javascript
+app.use('/js',express.static('dev/js')); //Route to /js for javascript
 app.use('/images',express.static('public/images')); //Route to /images for images
 
 app.listen(process.env.PORT || 8081);
