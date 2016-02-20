@@ -118,33 +118,38 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
 
   vm.steps = [];
 //Old controller
-  vm.addNewStep = function(tab) {
+  vm.addNewStep = function(keyCode) {
     var newTask = new Promise (function(resolve, reject) {
-      vm.newTask = String(vm.steps.length + 1);
-      var newStep = {};
-      newStep.id = 'step' + vm.newTask;
-      newStep.label = 'Step ' + vm.newTask;
-      vm.steps.push(newStep);
-      resolve();
+      if (keyCode === 9 || keyCode === "button" || keyCode === 13) {
+        if (keyCode === 9 || keyCode === "button") {
+          vm.newTask = String(vm.steps.length + 1);
+          var newStep = {};
+          newStep.id = 'step' + vm.newTask;
+          newStep.label = 'Step ' + vm.newTask;
+          vm.steps.push(newStep); 
+        }
+        resolve();
+      }
     });
 
     newTask.then(
       function(value) {
         console.log('Attempting adding step');
         var input = document.getElementById('new-task').getElementsByTagName('input');
-        if (tab === "tab") {
+        console.log('keycode: ' + keyCode);
+        if (keyCode === 9) {
           input[input.length - 2].focus();
         }
-        else {
-          if (tab === "enter") {
-            console.log('Detected enter key');
-          }
-          else {
-            input[input.length - 1].focus();
-          }
+        if (keyCode === 13) {
+          console.log('Detected enter key');
+          vm.submitTask();
         }
-      });
-    };
+        if (keyCode === "button") {
+          input[input.length - 1].focus();
+        }
+      }
+    );
+  };
 
   vm.initCheck = function() {
     taskService.getTasks().then(function(newData) {

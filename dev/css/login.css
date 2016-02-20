@@ -21,10 +21,6 @@ body {
   animation-name: login-in;
 }
 
-#signin-btn {
-  
-}
-
 #background {
   background-image: url('/images/home/college_ruled.svg');
   background-size: 100% 100%;

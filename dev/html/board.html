@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="theme-color" content="#0072ff">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
   <link rel="stylesheet" href="/style/board.css">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
@@ -21,10 +23,10 @@
         <md-tab layout="column" label="Home">
           <md-tab-content ng-cloak="">
           <!--Card for ng-repeat-->
-            <div id="card-layout" layout-align="center" md-padding layout-gt-md="row" layout="column" layout-wrap>
+            <div id="card-layout" layout-align="center" md-margin layout-gt-sm="row" layout="column" layout-wrap>
 
 
-              <md-card layout-gt-md="column" layout="row" ng-repeat="text in card.tasks" class="card">
+              <md-card layout-gt-sm="column" layout="row" ng-repeat="text in card.tasks" class="card">
                 <md-card-title>
                   <md-card-title-text>
                     <span class="md-headline">{{text.task}}</span>
@@ -36,7 +38,7 @@
                 <md-card-content layout="row" layout-align="space-around start" class="layout-align-space-between-stretch">
 
                   <div layout="column">
-                  <h4 hide-gt-md>Steps:</h4>
+                  <h4 hide-gt-sm>Steps:</h4>
                     <div ng-repeat="step in text.steps">
                       <md-checkbox aria-label="checkbox" ng-click="card.toggleCheck(text._id,step._id)" ng-checked={{step.checked}}>
                         {{step.step}}
@@ -114,15 +116,15 @@
                       </md-input-container>
                     </div>
                     <div layout="row" layout-align="start end">
-                      <div layout="column" layout-align="start start">
+                      <div id="steps" layout="column" layout-align="start start">
                         <div data-ng-repeat="step in card.steps">
                           <md-input-container layout-align="start start">
                             <label>{{step.label}}</label>
-                            <input  autocomplete="off" class="send-step" type="text" name="step" ng-keydown="$event.keyCode == 9 ? card.addNewStep('tab') : null">
+                            <input  autocomplete="off" class="send-step" type="text" name="step" ng-keydown="card.addNewStep($event.keyCode)">
                           </md-input-container>
                         </div>
                       </div>
-                      <md-button md-no-ink class="md-primary" ng-click="card.addNewStep()">Add Step</md-button>
+                      <md-button md-no-ink class="md-primary" ng-click="card.addNewStep('button')">Add Step</md-button>
                     </div>
                   </div>
                 </md-dialog-content>
