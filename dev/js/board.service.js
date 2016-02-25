@@ -132,25 +132,23 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
         resolve();
       }
     });
-
     newTask.then(
       function(value) {
-        console.log('Attempting adding step');
-        var input = document.getElementById('new-task').getElementsByTagName('input');
-        console.log('keycode: ' + keyCode);
+        var input = document.getElementsByClassName('send-step');
         if (keyCode === 9) {
-          input[input.length - 4].focus();
+          input[input.length - 2].focus();
           $location.hash('newAddStep');
           $anchorScroll();
+          $location.hash('');
         }
         if (keyCode === 13) {
-          console.log('Detected enter key');
           vm.submitTask();
         }
         if (keyCode === "button") {
-          input[input.length - 3].focus();
-           $location.hash('newAddStep');
+          input[input.length - 1].focus();
+          $location.hash('newAddStep');
           $anchorScroll();
+          $location.hash('');
         }
       }
     );
