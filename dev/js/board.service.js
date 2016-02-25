@@ -157,6 +157,13 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
   vm.initCheck = function() {
     taskService.getTasks().then(function(newData) {
       vm.tasks = newData.data;
+      for (var i = vm.tasks.length-1; i >= 0; i--) {
+        console.log(vm.tasks[i]);
+        var task = vm.tasks[i];
+        vm.dueDate[i] = task.due;
+        console.log(task.due);
+      }
+      //vm.dueDate[0] = vm.tasks[0].due;
       if (vm.tasks.length === 0) {
         $mdDialog.show(
         $mdDialog.alert()
@@ -168,7 +175,6 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
         );
       }
       else {
-        console.log(vm.tasks);
         $mdToast.show(
           $mdToast.simple()
             .textContent('You have ' + vm.tasks.length + ' tasks!')

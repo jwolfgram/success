@@ -31,7 +31,11 @@ gulp.task('minify', function() {
     }))
     .pipe(gulp.dest('public/images/board/'));
   gulp.src('dev/js/*.js')
-    .pipe(uglify())
+    .pipe(uglify({
+    compress: {
+         drop_console: true
+         }
+    }))
     .pipe(gulp.dest('public/js/'));
 });
 

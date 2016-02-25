@@ -143,6 +143,10 @@
   height: 50px;
 }
 
+.cardDate {
+  margin: 15px;
+}
+
 .spinner .path {
   stroke: red;
   stroke-linecap: round;
