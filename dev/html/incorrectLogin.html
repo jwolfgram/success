@@ -1,116 +1,107 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Success</title>
+  <meta name="description" content="A Task Manager for those who live multiple lives!"/>
+  <link rel="icon" href="/images/home/favicon.ico" type="image/x-icon"/>
+  <meta name="theme-color" content="#0072ff">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
   <link rel="stylesheet" href="/style/login.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.4/angular-material.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="/js/login.service.js"></script>
 </head>
 <body ng-app="validationApp">
-  <div class="background">
-    <div id="nav" class="container" >
-      <div class="row">
-        <div class="col-xs-11 col-sm-10 col-md-10 col-lg-10">
-          <ul class="nav nav-pills">
-            <li role="presentation" class="active" data-toggle="modal" data-target="#signup"><a href="#">Signup</a></li>
-            <li role="presentation" data-toggle="modal" data-target="#about"><a>About</a></li>
-          </ul>
+  <div layout="row" id="background">
+    <div id="nav">
+      <md-button type="submit" class="md-raised md-warn" data-toggle="modal" data-target="#signup">Signup</md-button>
+      <md-button type="submit" class="md-raised md-primary" data-toggle="modal" data-target="#about">About</md-button>
+    </div>
+    <div flex-gt-sm="30" flex-xs="80" flex-sm="50" id="login" class="badLogin"">
+      <form layout="column" ng-cloak action="/" method="post">
+        <h2>LOGIN</h2>
+        <md-input-container>
+          <label>Username</label>
+          <input name="username" type="text">
+        </md-input-container>
+        <md-input-container>
+          <label>Password</label>
+          <input name="password" type="password">
+        </md-input-container>
+        <div id="signin-btn">
+          <md-button id="signin-btn" type="submit" class="md-raised md-primary">Sign in</md-button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h3 class="modal-title" id="myModalLabel">About - Success!</h3>
+        </div>
+        <div class="modal-body">
+          <p>Success is a task manager made for the modern multitasker, including steps to complete your task and a space to take notes while working on your projects so you can remember where you left off when life calls you away.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-      <div class="row">
-        <div id="login" class="col-xs-8 col-sm-6 col-md-4 col-lg-3 badLogin">
-          <form class="form-horizontal" action="/" method="post">
-            <h2 class="form-signin-heading center-block">Login</h2>
+    </div>
+  </div>
+  <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h3 class="modal-title" id="myModalLabel">Get It Done!</h3>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" action="/signup" method="post" ng-controller="signupController as user" ngform name="signup">
+            <h4>It's free and always will be.</h4>
             <div class="form-group">
-              <div class="col-xs-12">
-                <label for="inputEmail" class="sr-only">Username</label>
-                <input type="text" id="inputEmail" class="form-control" placeholder="Username" required autofocus="" name="username">
+              <div class="col-xs-6">
+                <input type="text" name="firstname" value="" class="form-control input-lg" placeholder="First Name" ng-model="first" required ng-minlength="3"/>
+              </div>
+              <div class="col-xs-6">
+                <input type="text" name="lastname" value="" class="form-control input-lg" placeholder="Last Name" required ng-minlength="3" ng-model="last"/>
               </div>
             </div>
             <div class="form-group">
               <div class="col-xs-12">
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password">
+                <input type="text" name="username" value="" class="form-control input-lg" placeholder="Username" ng-model="username" required ng-minlength="6" ng-class="{ 'has-error' : signup.username.$invalid && !signup.username.$pristine }"/>
+                <span ng-show="!username">Please a username longer then six characters!</span>
               </div>
             </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" value="remember-me"> Remember me
-              </label>
+            <div class="form-group">
+              <div class="col-xs-12">
+                <input type="password" name="password" value="" class="form-control input-lg" placeholder="Password" ng-model="password" ng-minlength="6" ng-maxlength="20" ng-pattern="/^(?=.*\d).{6,20}$/" required ng-class="{ 'has-error' : signup.password.$invalid && !signup.password.$pristine }"/>
+                <span ng-show="!password">Password must be between 4 and 8 digits long and include at least one numeric digit!</span>
+              </div>
             </div>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <div class="form-group">
+              <div class="col-xs-12">
+                <input type="password" value="" class="form-control input-lg" placeholder="Confirm Password" ng-model="repassword" ng-class="{ 'has-error' : password != repassword && !signup.repassword.$pristine }"/>
+                <span ng-show="password != repassword">Passwords must match!</span>
+              </div>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signup.$invalid || password != repassword">Sign Up</button>
           </form>
         </div>
-      </div>
-    </div>
-    <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h3 class="modal-title" id="myModalLabel">About - Get  it done!</h3>
-          </div>
-          <div class="modal-body">
-            <p>Get it done is a task manager made for the modern multitasker, including steps to complete your task and a space to take notes while working on your projects so you can remember where you left off when life calls you away.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
-    <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h3 class="modal-title" id="myModalLabel">Get It Done!</h3>
-          </div>
-          <div class="modal-body">
-            <form class="form-horizontal" action="/signup" method="post" ng-controller="signupController as user" ngform name="signup">
-              <h4>It's free and always will be.</h4>
-              <div class="form-group">
-                <div class="col-xs-6">
-                  <input type="text" name="firstname" value="" class="form-control input-lg" placeholder="First Name" ng-model="first" required ng-minlength="3"/>
-                </div>
-                <div class="col-xs-6">
-                  <input type="text" name="lastname" value="" class="form-control input-lg" placeholder="Last Name" required ng-minlength="3" ng-model="last"/>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-xs-12">
-                  <input type="text" name="username" value="" class="form-control input-lg" placeholder="Username" ng-model="username" required ng-minlength="6" ng-class="{ 'has-error' : signup.username.$invalid && !signup.username.$pristine }"/>
-                  <span ng-show="!username">Please a username longer then six characters!</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-xs-12">
-                  <input type="password" name="password" value="" class="form-control input-lg" placeholder="Password" ng-model="password" ng-minlength="6" ng-maxlength="20" ng-pattern="/^(?=.*\d).{6,20}$/" required ng-class="{ 'has-error' : signup.password.$invalid && !signup.password.$pristine }"/>
-                  <span ng-show="!password">Password must be between 4 and 8 digits long and include at least one numeric digit!</span>
-                </div>
-
-              </div>
-
-              <div class="form-group">
-                <div class="col-xs-12">
-                  <input type="password" value="" class="form-control input-lg" placeholder="Confirm Password" ng-model="repassword" ng-class="{ 'has-error' : password != repassword && !signup.repassword.$pristine }"/>
-                  <span ng-show="password != repassword">Passwords must match!</span>
-                </div>
-              </div>
-              <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signup.$invalid || password != repassword">Sign Up</button>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-  <script src="/js/login.js"></script>
-  <script src="/js/login.service.js"></script>
 </body>
 </html>
