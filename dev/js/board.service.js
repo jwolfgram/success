@@ -10,7 +10,13 @@ app.factory('taskService', ['$http',function($http) {
       return $http.post('/api/task/delete', [task]);
     },
     sendTask : function(task) {
-      return $http.post('/api/task/', [task]);
+      return $http.post('/api/task/', ['newTask',task]);
+    },
+    sendDue : function(task,due) {
+      return $http.post('/api/task/', ['updateDue',task,due]);
+    },
+    sendRemind : function(task,reminder) {
+      return $http.post('/api/task/', ['updateRemind',task,reminder]);
     }
   };
 }]);
@@ -36,10 +42,30 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     vm.addStep = null;
   };
 
-  vm.toggleCheck = function(taskID,stepID) {
-    stepsService.toggleCheck(taskID,stepID).then(function(newData) {
-      vm.tasks = newData.data;
-    });
+  vm.update = function(update,taskID,item) {
+    if (update === "taskCheck") {
+      stepsService.toggleCheck(taskID,item).then(function(newData) {
+        vm.tasks = newData.data;
+      });
+    }
+    if (update === "dueDate") {
+      taskService.sendDue(taskID,vm.cardDueDate[item]).then(function(newData) {
+        vm.tasks = newData.data;
+      });
+    }
+    if (update === "remindDate") {
+      var remindDate = vm.cardRemindDate[item];
+      var remindTime = vm.cardRemindTime[item];
+      var remindDate = remindDate.toString();
+      var remindTime = remindTime.toString();
+      var date = remindDate.substring(0, 15);
+      var time = remindTime.substring(15, remindTime.length);
+      remindSend = new Date(date + time);
+      taskService.sendRemind(taskID,remindSend).then(function(newData) {
+        vm.tasks = newData.data;
+      });
+    }
+
   };
 
   vm.deleteTask = function(id) {
@@ -105,13 +131,6 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     taskService.getTasks().then(function(newData) {
       vm.tasks = newData.data;
       console.log(vm.tasks);
-      $mdToast.show(
-        $mdToast.simple()
-          .textContent('You have ' + vm.tasks.length + ' tasks!')
-          .position('bottom right')
-          .parent(document.getElementById('toast'))
-          .hideDelay(3000)
-      );
     });
     var taskDialog = document.getElementById('new-task');
     taskDialog.setAttribute("class", "hide-new-task");
@@ -157,31 +176,16 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
   vm.initCheck = function() {
     taskService.getTasks().then(function(newData) {
       vm.tasks = newData.data;
-      for (var i = vm.tasks.length-1; i >= 0; i--) {
-        console.log(vm.tasks[i]);
-        var task = vm.tasks[i];
-        vm.dueDate[i] = task.due;
-        console.log(task.due);
-      }
-      //vm.dueDate[0] = vm.tasks[0].due;
-      if (vm.tasks.length === 0) {
-        $mdDialog.show(
-        $mdDialog.alert()
-          .clickOutsideToClose(true)
-          .title('No Tasks!')
-          .textContent('It Looks Like You Have No Tasks, Go Ahead And Make One!')
-          .ariaLabel('No Tasks, make a new one!')
-          .ok('Ok Cool!')
-        );
-      }
-      else {
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('You have ' + vm.tasks.length + ' tasks!')
-            .position('bottom right')
-            .parent(document.getElementById('toast'))
-            .hideDelay(3000)
-        );
+      vm.cardDueDate = [];
+      vm.cardRemindDate = [];
+      vm.cardRemindTime = [];
+      for (var i = 0; i <= vm.tasks.length-1; i++) {
+        var task = vm.tasks[i]; //Defines the task we are working with
+        var dueDate = new Date(task.due);
+        var remindDate = new Date(task.remind);
+        vm.cardDueDate[i] = dueDate;
+        vm.cardRemindDate[i] = remindDate;
+        vm.cardRemindTime[i] = remindDate;
       }
     });
   };

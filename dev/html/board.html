@@ -28,28 +28,23 @@
                 <md-card-title>
                   <md-card-title-text>
                     <span class="md-headline">{{text.task}}</span>
+                    <span class="md-subhead">Due Date:</span>
+                    <md-datepicker ng-change="card.update('dueDate',text._id,$index)" class="cardDate" ng-model="card.cardDueDate[$index]"></md-datepicker>
+                    <span class="md-subhead">Reminder:</span>
+                    <div layout="row" layout-align="start start">
+                      <md-datepicker ng-change="card.update('remindDate',text._id,$index)" class="cardDate" ng-model="card.cardRemindDate[$index]"></md-datepicker>
+                      <md-input-container>
+                        <label>Time:</label>
+                        <input type="time" ng-change="card.update('remindDate',text._id,$index)" ng-model="card.cardRemindTime[$index]">
+                      </md-input-container>
+                    </div>
                   </md-card-title-text>
                 </md-card-title>
                 <md-card-content layout="row" layout-align="space-around start" class="layout-align-space-between-stretch">
                   <div layout="column">
-
-                    <span class="md-subhead">Due Date: </span>
-                    <md-datepicker class="cardDate" ng-model="card.dueDate[$index]"></md-datepicker>
-
-
-                    <span class="md-subhead">Reminder: </span>
-                    <div layout="row" layout-align="start start">
-                      <md-datepicker class="cardDate" ng-model="card.remindDate[$index]"></md-datepicker>
-                      <md-input-container>
-                        <label>Time:</label>
-                        <input type="time" ng-model="card.remindTime[$index]">
-                      </md-input-container>
-                    </div>
-
-
-                  <span class="md-subhead" hide-gt-sm>Steps:</span>
+                  <span class="md-subhead">Steps:</span>
                     <div ng-repeat="step in text.steps">
-                      <md-checkbox aria-label="checkbox" ng-click="card.toggleCheck(text._id,step._id)" ng-checked={{step.checked}}>
+                      <md-checkbox aria-label="checkbox" ng-click="card.update('taskCheck',text._id,step._id)" ng-checked={{step.checked}}>
                         {{step.step}}
                       </md-checkbox>
                     </div>
@@ -99,8 +94,6 @@
                 New Task
               </md-tooltip>
             </md-button>
-            <div id="toast">
-            </div>
             <!-- New Task Dialoge -->
             <div id="new-task" class="md-dialog-container hide-new-task">
               <div class="ng-scope md-transition-in md-dialog">
