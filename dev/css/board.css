@@ -107,6 +107,10 @@
   position: relative;
 }
 
+.step-title {
+  margin-top: 20px;
+}
+
 #tabs md-tab-content:first-child {
   background: linear-gradient(to bottom, #0072ff, #00c6ff);
   min-height: 100%;
@@ -143,8 +147,9 @@
   height: 50px;
 }
 
-.cardDate {
-  margin: 15px;
+.cardTime {
+  margin-left: 15px;
+  margin-top: 3px;
 }
 
 .spinner .path {

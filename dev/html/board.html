@@ -29,11 +29,11 @@
                   <md-card-title-text>
                     <span class="md-headline">{{text.task}}</span>
                     <span class="md-subhead">Due Date:</span>
-                    <md-datepicker ng-change="card.update('dueDate',text._id,$index)" class="cardDate" ng-model="card.cardDueDate[$index]"></md-datepicker>
+                    <md-datepicker ng-change="card.update('dueDate',text._id,$index)" ng-model="card.cardDueDate[$index]"></md-datepicker>
                     <span class="md-subhead">Reminder:</span>
-                    <div layout="row" layout-align="start start">
-                      <md-datepicker ng-change="card.update('remindDate',text._id,$index)" class="cardDate" ng-model="card.cardRemindDate[$index]"></md-datepicker>
-                      <md-input-container>
+                    <div layout-gt-sm="row" layout="column" layout-align="start start">
+                      <md-datepicker ng-change="card.update('remindDate',text._id,$index)" ng-model="card.cardRemindDate[$index]"></md-datepicker>
+                      <md-input-container class="cardTime">
                         <label>Time:</label>
                         <input type="time" ng-change="card.update('remindDate',text._id,$index)" ng-model="card.cardRemindTime[$index]">
                       </md-input-container>
@@ -42,7 +42,7 @@
                 </md-card-title>
                 <md-card-content layout="row" layout-align="space-around start" class="layout-align-space-between-stretch">
                   <div layout="column">
-                  <span class="md-subhead">Steps:</span>
+                  <span class="md-subhead step-title">Steps:</span>
                     <div ng-repeat="step in text.steps">
                       <md-checkbox aria-label="checkbox" ng-click="card.update('taskCheck',text._id,step._id)" ng-checked={{step.checked}}>
                         {{step.step}}

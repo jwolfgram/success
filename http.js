@@ -118,19 +118,41 @@ app.get('/api/task', function(req, res) { //This will send the users task along 
 
 app.post('/api/task', bodyParser.json(), function(req, res) { //This will send the users task along with the steps for ng-repete to display
   console.log(req.body); //break req.body.step into array before pushing
-  var addTask = new Promise (function(resolve, reject) {
-    db.Account.findOneAndUpdate(
-    {'username': req.user},
-    {$push: {tasks: {'task': req.body[0].task, 'steps': req.body[0].steps, 'due': req.body[0].due, 'remind': req.body[0].remind}}},
-    function (err, docs) {
-      if (err) {
-        console.log(err); //Possibly if it will not make on its own, create new task
-      } else {
-        resolve("Success!");
-      }
-    });
+
+  var update = new Promise (function(resolve, reject) {
+    if(req.body[0] === "newTask") {
+      db.Account.findOneAndUpdate(
+      {'username': req.user},
+      {$push: {tasks: {'task': req.body[1].task, 'steps': req.body[1].steps, 'due': req.body[1].due, 'remind': req.body[1].remind}}},
+      function (err, docs) {
+        if (err) {
+          console.log(err); //Possibly if it will not make on its own, create new task
+        } else {
+          resolve("Success!");
+        }
+      });
+    } 
+    else {
+      db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
+        if (docs.length === 0) {
+          console.log(err);
+        }
+        else {
+          var task = docs[0].tasks.id(req.body[1]);
+          if(req.body[0] === "updateRemind") {
+            console.log(task.remind);
+            task.remind = new Date(req.body[2]);
+          }
+          if(req.body[0] === "updateDue") {
+            console.log(task.due);
+            task.due = new Date(req.body[2]);
+          }
+        }
+        docs[0].save();
+      });
+    }
   });
-  addTask.then(
+  update.then(
     function(value) {
       db.Account.find({ 'username': req.user }, function (err, docs) { //req.user
         if (docs.length === 0) {
