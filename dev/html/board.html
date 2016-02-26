@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Success</title>
   <meta name="theme-color" content="#0072ff">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
@@ -13,7 +14,7 @@
   <script src="/js/board.service.js"></script>
 </head>
 <body ng-app="app">
-  <div ng-cloak ng-controller="cardController as card" layout="column" layout-fill ng-init="card.initCheck()">
+  <div ng-cloak ng-controller="cardController as card" layout="column" layout-fill ng-init="card.fetch()">
     <!-- Loading spinnger CSS, needs work if there is enough time to view it -->
       <svg class="spinner" ng-cloak="" viewBox="0 0 50 50">
         <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>

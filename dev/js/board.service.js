@@ -43,29 +43,34 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
   };
 
   vm.update = function(update,taskID,item) {
-    if (update === "taskCheck") {
-      stepsService.toggleCheck(taskID,item).then(function(newData) {
-        vm.tasks = newData.data;
-      });
-    }
-    if (update === "dueDate") {
-      taskService.sendDue(taskID,vm.cardDueDate[item]).then(function(newData) {
-        vm.tasks = newData.data;
-      });
-    }
-    if (update === "remindDate") {
-      var remindDate = vm.cardRemindDate[item];
-      var remindTime = vm.cardRemindTime[item];
-      var remindDate = remindDate.toString();
-      var remindTime = remindTime.toString();
-      var date = remindDate.substring(0, 15);
-      var time = remindTime.substring(15, remindTime.length);
-      remindSend = new Date(date + time);
-      taskService.sendRemind(taskID,remindSend).then(function(newData) {
-        vm.tasks = newData.data;
-      });
-    }
-
+    var promise = new Promise (function(resolve, reject) {
+      if (update === "taskCheck") {
+        stepsService.toggleCheck(taskID,item).then(function(newData) {
+          vm.tasks = newData.data;
+        });
+      }
+      if (update === "dueDate") {
+        taskService.sendDue(taskID,vm.cardDueDate[item]).then(function(newData) {
+          vm.tasks = newData.data;
+        });
+      }
+      if (update === "remindDate") {
+        var remindDate = vm.cardRemindDate[item];
+        var remindTime = vm.cardRemindTime[item];
+        var remindDate = remindDate.toString();
+        var remindTime = remindTime.toString();
+        var date = remindDate.substring(0, 15);
+        var time = remindTime.substring(15, remindTime.length);
+        remindSend = new Date(date + time);
+        taskService.sendRemind(taskID,remindSend).then(function(newData) {
+          vm.tasks = newData.data;
+        });
+      }
+      resolve();
+    });
+    promise.then(function(value) {
+      vm.fetch();
+    });
   };
 
   vm.deleteTask = function(id) {
@@ -105,7 +110,7 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
       sendData.due = vm.dueDate;
       sendData.remind = remindSend;
       taskService.sendTask(sendData).then(function(newData) {
-        vm.tasks = newData.data;
+        vm.fetch();
       });
       var taskDialog = document.getElementById('new-task');
       taskDialog.setAttribute("class", "hide-new-task");
@@ -173,7 +178,7 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     );
   };
 
-  vm.initCheck = function() {
+  vm.fetch = function() {
     taskService.getTasks().then(function(newData) {
       vm.tasks = newData.data;
       vm.cardDueDate = [];
