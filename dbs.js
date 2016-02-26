@@ -13,10 +13,9 @@ var TaskSchema = new mongoose.Schema({
     task: {
       type: String
     },
-    description: {
-      type: String
-    },
-    steps: [StepsSchema]
+    steps: [StepsSchema],
+    due: Date,
+    remind: Date
 });
 
 var AccountSchema = new mongoose.Schema({
