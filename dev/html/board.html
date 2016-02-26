@@ -29,7 +29,7 @@
                   <md-card-title-text>
                     <span class="md-headline">{{text.task}}</span>
                     <span class="md-subhead">Due Date:</span>
-                    <md-datepicker ng-change="card.update('dueDate',text._id,$index)" ng-model="card.cardDueDate[$index]"></md-datepicker>
+                    <md-datepicker class="due-picker" ng-change="card.update('dueDate',text._id,$index)" ng-model="card.cardDueDate[$index]"></md-datepicker>
                     <span class="md-subhead">Reminder:</span>
                     <div layout-gt-sm="row" layout="column" layout-align="start start">
                       <md-datepicker ng-change="card.update('remindDate',text._id,$index)" ng-model="card.cardRemindDate[$index]"></md-datepicker>

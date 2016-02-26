@@ -152,6 +152,10 @@
   margin-top: 3px;
 }
 
+.due-picker {
+  margin-right: 0px;
+}
+
 .spinner .path {
   stroke: red;
   stroke-linecap: round;
