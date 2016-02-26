@@ -50,7 +50,7 @@
                       </md-checkbox>
                     </div>
                     <div div layout="row">
-                      <md-button id="addtask-btn" flex="20" class="md-icon-button" aria-label="Add Step" ng-click="card.addCardStep(text._id)">
+                      <md-button id="addtask-btn" flex="20" class="md-icon-button" aria-label="Add Step" ng-click="card.addCardStep(text._id,$index)">
                         <md-icon class="button-shadow" md-svg-src="/images/board/add.svg"></md-icon>
                         <md-tooltip>
                           Add Step
@@ -58,7 +58,7 @@
                       </md-button>
                       <md-input-container flex="65">
                         <label>Add new step</label>
-                        <input type="text" ng-model="card.addStep" ng-keyup="$event.keyCode == 13 ? card.addCardStep(text._id) : null" required>
+                        <input type="text" ng-model="card.addStep[$index]" ng-keyup="$event.keyCode == 13 ? card.addCardStep(text._id,$index) : null" required>
                       </md-input-container>
                     </div>
                   </div>

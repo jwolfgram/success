@@ -35,11 +35,11 @@ app.factory('stepsService', ['$http',function($http) {
 app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast', 'taskService', 'stepsService', '$location', '$anchorScroll', function($scope, $mdMedia, $mdDialog, $mdToast, taskService, stepsService, $location, $anchorScroll) {
   vm = this;
 
-  vm.addCardStep = function(taskID) {
-    stepsService.sendStep(taskID,vm.addStep).then(function(newData) {
+  vm.addCardStep = function(taskID,index) {
+    stepsService.sendStep(taskID,vm.addStep[index]).then(function(newData) {
       vm.tasks = newData.data;
     });
-    vm.addStep = null;
+    vm.addStep[index] = null;
   };
 
   vm.update = function(update,taskID,item) {
