@@ -89,10 +89,14 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     var promise = new Promise (function(resolve, reject) {
       var remindDate = vm.remindDate;
       var remindTime = vm.remindTime;
-      var remindDate = remindDate.toString();
-      var remindTime = remindTime.toString();
-      var date = remindDate.substring(0, 15);
-      var time = remindTime.substring(15, remindTime.length);
+      if(remindDate !== undefined) {
+        var remindDate = remindDate.toString();
+        var date = remindDate.substring(0, 15);
+      }
+      if(remindTime !== undefined) {
+        var remindTime = remindTime.toString();
+        var time = remindTime.substring(15, remindTime.length);
+      }
       remindSend = new Date(date + time);
       console.log(vm.dueDate);
       console.log(remindSend);
