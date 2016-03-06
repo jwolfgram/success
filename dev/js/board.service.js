@@ -73,10 +73,21 @@ app.controller('cardController', ['$scope', '$mdMedia', '$mdDialog', '$mdToast',
     });
   };
 
-  vm.deleteTask = function(id) {
-    taskService.deleteTask(id).then(function(newData) {
-      vm.tasks = newData.data;
-      console.log(newData.data);
+   vm.deleteTask = function(ev, id) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Would you like to delete this task?')
+          .textContent('This will perminately remove this task from your account, you cannot undo this.')
+          .ariaLabel('Lucky day')
+          .targetEvent(ev)
+          .ok('Delete')
+          .cancel('No, keep it!');
+    $mdDialog.show(confirm).then(function() {
+      taskService.deleteTask(id).then(function(newData) {
+        vm.tasks = newData.data;
+        console.log(newData.data);
+      });
+    }, function() {
     });
   };
 
