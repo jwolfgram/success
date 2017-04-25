@@ -5,7 +5,7 @@ imagemin = require('gulp-imagemin'),
 csso = require('gulp-csso'),
 htmlmin = require('gulp-htmlmin');
 
-gulp.task('start', function() {
+gulp.task('start', ['minify'], function() {
   nodemon({
     script: 'http.js',
   }).on('start');
