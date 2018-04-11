@@ -24,7 +24,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test\" && exit 1",
-    "start": "node http.js"
+    "start": "node http.js",
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
